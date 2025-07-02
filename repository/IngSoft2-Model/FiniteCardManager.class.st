@@ -1,12 +1,16 @@
 Class {
-	#name : 'CardsManager',
+	#name : 'FiniteCardManager',
 	#superclass : 'Object',
+	#instVars : [
+		'mazo',
+		'descarte'
+	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'as yet unclassified' }
-CardsManager >> cardsdistribution [
+FiniteCardManager >> cardsdistribution [
 
 	| cardsDistribution |
 	cardsDistribution := OrderedCollection new.
@@ -20,14 +24,24 @@ CardsManager >> cardsdistribution [
 ]
 
 { #category : 'as yet unclassified' }
-CardsManager >> createACard [
-	
-	| aDistributionOfCards randomValue selectedCard |
-	aDistributionOfCards := self cardsdistribution.
-	randomValue := Random new next * 60.
-	selectedCard := aDistributionOfCards detect: [:each |
-            randomValue <= (each at: 2).
-        ] ifNone: [aDistributionOfCards last].
-	
-	^(selectedCard at: 1) new.
+FiniteCardManager >> createACard [
+	| dist valor clase |
+	dist := self cardsdistribution.
+	valor := (Random new next * 60).
+	clase := (dist detect: [:e | valor <= (e at: 2)] ifNone: [dist last]) at: 1.
+	^ clase new.
+
+]
+
+{ #category : 'instance creation' }
+FiniteCardManager >> with: anInteger [ 
+
+	mazo := OrderedCollection new.
+	descarte := OrderedCollection new.
+
+	anInteger timesRepeat: [
+		mazo add: self createACard.
+	].
+
+	^ mazo
 ]
