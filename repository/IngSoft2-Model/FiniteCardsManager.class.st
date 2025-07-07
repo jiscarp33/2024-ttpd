@@ -3,15 +3,26 @@ Class {
 	#superclass : 'CardsManager',
 	#instVars : [
 		'size',
-		'deck'
+		'deck',
+		'discartDeck'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
 
 { #category : 'as yet unclassified' }
+FiniteCardsManager >> discart: aCard [
+	discartDeck add: aCard.
+]
+
+{ #category : 'as yet unclassified' }
 FiniteCardsManager >> getCards [
 	^deck
+]
+
+{ #category : 'as yet unclassified' }
+FiniteCardsManager >> getDiscardDeck [
+	^discartDeck 
 ]
 
 { #category : 'as yet unclassified' }
@@ -21,7 +32,10 @@ FiniteCardsManager >> getdecksize [
 
 { #category : 'as yet unclassified' }
 FiniteCardsManager >> giveCard [
-	| card |
+	|card|
+	deck isEmpty ifTrue: [ self reshuffle ].
+	deck isEmpty ifTrue: [ self error: 'No cards available in deck or discard pile.' ].
+
 	card:= deck first.
 	deck remove: card.
 	^card
@@ -30,9 +44,18 @@ FiniteCardsManager >> giveCard [
 { #category : 'as yet unclassified' }
 FiniteCardsManager >> inicializeWithDeckSize: aSize [
 	deck := OrderedCollection new.
+	discartDeck :=OrderedCollection new.
 	size := aSize .
 	
 	aSize timesRepeat: [
 		deck add: self createACard
 	].
+]
+
+{ #category : 'as yet unclassified' }
+FiniteCardsManager >> reshuffle [
+	deck := discartDeck shuffled.
+	discartDeck := OrderedCollection new.
+
+	
 ]
