@@ -15,11 +15,21 @@ self assert: finiteManager getdecksize equals: 20
 ]
 
 { #category : 'running' }
-AFiniteCardsManagerTest >> test_03_AFiniteCardsManagerGiveMeACard [
+AFiniteCardsManagerTest >> test_03_AFiniteCardsManagerCreateAFiniteDeckWithCards [
 
 | finiteManager aCard|
 finiteManager:= FiniteCardsManager withDeckSize: 20.
 aCard:=finiteManager getCards at: 1.
+
+self assert: (aCard isKindOf: Card).
+]
+
+{ #category : 'running' }
+AFiniteCardsManagerTest >> test_04_AFiniteCardsManagerGiveACard [
+
+| finiteManager aCard|
+finiteManager:= FiniteCardsManager withDeckSize: 20.
+aCard:=finiteManager giveCard.
 
 self assert: (aCard isKindOf: Card).
 ]

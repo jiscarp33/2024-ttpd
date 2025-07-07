@@ -5,9 +5,6 @@ Class {
 		'size',
 		'deck'
 	],
-	#classInstVars : [
-		'size'
-	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
 }
@@ -20,6 +17,14 @@ FiniteCardsManager >> getCards [
 { #category : 'as yet unclassified' }
 FiniteCardsManager >> getdecksize [
 	^size
+]
+
+{ #category : 'as yet unclassified' }
+FiniteCardsManager >> giveCard [
+	| card |
+	card:= deck first.
+	deck remove: card.
+	^card
 ]
 
 { #category : 'as yet unclassified' }
