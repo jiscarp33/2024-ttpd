@@ -1,8 +1,9 @@
 Class {
 	#name : 'FiniteCardsManager',
-	#superclass : 'Object',
+	#superclass : 'CardsManager',
 	#instVars : [
-		'size'
+		'size',
+		'deck'
 	],
 	#classInstVars : [
 		'size'
@@ -12,11 +13,21 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+FiniteCardsManager >> getCards [
+	^deck
+]
+
+{ #category : 'as yet unclassified' }
 FiniteCardsManager >> getdecksize [
 	^size
 ]
 
 { #category : 'as yet unclassified' }
 FiniteCardsManager >> inicializeWithDeckSize: aSize [
-	size:=aSize
+	deck := OrderedCollection new.
+	size := aSize .
+	
+	aSize timesRepeat: [
+		deck add: self createACard
+	].
 ]

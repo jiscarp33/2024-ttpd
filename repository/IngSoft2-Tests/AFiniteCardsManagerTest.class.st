@@ -13,3 +13,13 @@ finiteManager:= FiniteCardsManager withDeckSize: 20.
 
 self assert: finiteManager getdecksize equals: 20
 ]
+
+{ #category : 'running' }
+AFiniteCardsManagerTest >> test_03_AFiniteCardsManagerGiveMeACard [
+
+| finiteManager aCard|
+finiteManager:= FiniteCardsManager withDeckSize: 20.
+aCard:=finiteManager getCards at: 1.
+
+self assert: (aCard isKindOf: Card).
+]
