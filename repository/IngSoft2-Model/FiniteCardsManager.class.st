@@ -34,7 +34,7 @@ FiniteCardsManager >> getdecksize [
 FiniteCardsManager >> giveCard [
 	|card|
 	deck isEmpty ifTrue: [ self reshuffle ].
-	deck isEmpty ifTrue: [ self error: 'No cards available in deck or discard pile.' ].
+	deck isEmpty ifTrue: [ ^nil ].
 
 	card:= deck first.
 	deck remove: card.

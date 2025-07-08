@@ -66,3 +66,10 @@ finiteManager discart: aCard4.
 
 self assert: ( finiteManager giveCard isKindOf: Card).
 ]
+
+{ #category : 'running' }
+AFiniteCardsManagerTest >> test_08_WhenNoCardsInDeckAndDiscardDeckNoCardGiven [
+	| finiteManager |
+	finiteManager := FiniteCardsManager withDeckSize: 0.
+	self assert:  finiteManager giveCard equals: nil.
+]
