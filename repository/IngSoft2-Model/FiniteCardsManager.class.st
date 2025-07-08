@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-FiniteCardsManager >> discart: aCard [
+FiniteCardsManager >> discard: aCard [
 	discartDeck add: aCard.
 ]
 

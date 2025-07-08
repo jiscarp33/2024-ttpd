@@ -40,7 +40,7 @@ AFiniteCardsManagerTest >> test_05_AFiniteCardsManagerHasADiscardDeck [
 | finiteManager aCard anAnotherCard |
 finiteManager:= FiniteCardsManager withDeckSize: 20.
 aCard:=finiteManager giveCard.
-finiteManager discart: aCard.
+finiteManager discard: aCard.
 anAnotherCard:= finiteManager getDiscardDeck at:1.
 
 self assert: (anAnotherCard isKindOf: Card).
@@ -57,11 +57,11 @@ aCard2:=finiteManager giveCard.
 aCard3:=finiteManager giveCard.
 aCard4:=finiteManager giveCard.
 
-finiteManager discart: aCard0.
-finiteManager discart: aCard1.
-finiteManager discart: aCard2.
-finiteManager discart: aCard3.
-finiteManager discart: aCard4.
+finiteManager discard: aCard0.
+finiteManager discard: aCard1.
+finiteManager discard: aCard2.
+finiteManager discard: aCard3.
+finiteManager discard: aCard4.
 
 
 self assert: ( finiteManager giveCard isKindOf: Card).
