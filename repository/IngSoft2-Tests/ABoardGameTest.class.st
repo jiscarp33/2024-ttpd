@@ -472,6 +472,7 @@ ABoardGameTest >> test_21_WhenARedoCardIsPLayedAfterAPermanentCardThenTheEffectI
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := AllyCard new.
 	aRedoCard := RedoCard  new.
@@ -506,6 +507,7 @@ ABoardGameTest >> test_23_WhenARedoCardIsPLayedAfterAReDoCardThenTheEffectIsTheO
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 3.
 	aBoardGame playTurn.	
 	aBoardGame playTurn.
@@ -546,6 +548,7 @@ ABoardGameTest >> test_24_WhenABoardGameAddsInformationtoAHyperJumpBoxThenItIsAd
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aBox := aBoard boxes at: 3.
 	aParsecsList := OrderedCollection new.
@@ -577,6 +580,7 @@ ABoardGameTest >> test_25_WhenABoardGameAddsInformationtoAHyperGravityBoxThenItI
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aBox := aBoard boxes at: 3.
 	aDieResult := 4.
@@ -605,6 +609,7 @@ ABoardGameTest >> test_26_WhenABoardGameAddsInformationAMoonWalkBoxThenItIsRetur
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aBox := aBoard boxes at: 3.
 	aBoxNumber := 4.
@@ -633,6 +638,7 @@ ABoardGameTest >> test_27_WhenANotHyperGravityBoxAskToAddInformationThenAErrorRa
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aBox := aBoard boxes at: 3.
 	aDieResult := 4.
@@ -665,6 +671,7 @@ ABoardGameTest >> test_28_WhenANotHyperJumpBoxAskToAddInformationThenAnErrorRais
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aBox := aBoard boxes at: 3.
 	aParsecsList := OrderedCollection new.
@@ -700,6 +707,7 @@ ABoardGameTest >> test_29_WhenANotMoonWalkBoxAskToAddInformationThenAnErrorRaise
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aBox := aBoard boxes at: 3.
 	aBoxNumber := 4.
@@ -732,6 +740,7 @@ ABoardGameTest >> test_30_WhenAOverloadCardIsPlayedThenTheShipsMovesGetAffected_
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aOverloadCard := OverloadCard new.
 	aShip := aBoardGame getShipsPlaying at: 1.
@@ -763,6 +772,7 @@ ABoardGameTest >> test_31_WhenAAccelerationCardIsPlayedThenAllShipsGetTheirMoves
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	anAcellerationCard := AccelerationCard new.
 	aShip := aBoardGame getShipsPlaying at: 1.
@@ -798,6 +808,7 @@ ABoardGameTest >> test_32_WhenAAllyCardIsPlayedThenShipsGetTheirMovesAffected_Re
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	anAllyCard := AllyCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
@@ -829,6 +840,7 @@ ABoardGameTest >> test_33_TheGameKnowsTheLastCardBeingPlayed_Refactor [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aCard := AllyCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
@@ -857,6 +869,7 @@ ABoardGameTest >> test_34_WhenAShipTryesToPlayAPermanentCardAndItsNotItsTurnThen
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := OverloadCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
@@ -889,6 +902,7 @@ ABoardGameTest >> test_35_ABoardGameIsCreatedWithACardsManager [
 		              withShip: 1
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aCardManager:=aBoardGame getCardManager.
 	self assert: (aCardManager isKindOf: CardsManager).
@@ -914,6 +928,7 @@ ABoardGameTest >> test_36_ABoardGameCanBePlayedWithAFiniteDeck [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := OverloadCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
