@@ -17,19 +17,6 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollectionOfDice andwithNumberOfLaps: numberOfLaps [
-
-	aNumberOfShips < 1 ifTrue: [  Error signal: 'A Board must have at least 1 ship to be created'  ].
-	numberOfLaps < 2 ifTrue: [  Error signal: 'A Board must have at least 2 laps to be created'  ].
-
-	^ self new
-		  initializeWithShips: aNumberOfShips
-		  whithBoard: aBoard
-		  withDice: aCollectionOfDice
-		  andwithNumberOfLaps: numberOfLaps
-]
-
-{ #category : 'as yet unclassified' }
 BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollectionOfDice  withManager: aCardManager andwithNumberOfLaps: numberOfLaps [
 
 	aNumberOfShips < 1 ifTrue: [  Error signal: 'A Board must have at least 1 ship to be created'  ].
@@ -166,14 +153,18 @@ BoardGame >> passTurn [
 
 { #category : 'as yet unclassified' }
 BoardGame >> playCard: aCard fromShip: aShip toTarget: aTarget [
-    ((aCard isPermanent and: [(aCollectionOfShips indexOf: aShip) = playerTurn]) or: (aCard isInstant or: aCard isRedo))
-        ifTrue: [
-            	lastCard := aCard affectTo:  aTarget from: aShip playing: self.
-				aShip removeCardFromHand: aCard.
-        ]
-        ifFalse: [
-            self error: 'You cant play a permanent card when its not your turn.'
-        ].
+	((aCard isPermanent and: [(aCollectionOfShips indexOf: aShip) = playerTurn])
+		or: (aCard isInstant or: aCard isRedo))
+		ifTrue: [
+			lastCard := aCard affectTo: aTarget from: aShip playing: self.
+			aShip removeCardFromHand: aCard.
+
+			(aCard isInstant or: aCard isRedo)
+				ifTrue: [ aCardManager discard: aCard ].
+		]
+		ifFalse: [
+			self error: 'You cant play a permanent card when its not your turn.'
+		].
 
 ]
 

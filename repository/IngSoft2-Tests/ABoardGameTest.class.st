@@ -966,3 +966,32 @@ ABoardGameTest >> test_37_ACardsManagerIsPassWhenABoardGameIsCreated [
 		              andwithNumberOfLaps: 2.
 	self assert: (aBoardGame getCardManager isKindOf: CardsManager). 
 ]
+
+{ #category : 'tests' }
+ABoardGameTest >> test_38_WhenAnInstantCardIsPlayedByAShipThenItsRemovedFromTheShipHandAndAppearInTheDeckDiscard [
+
+	| aCollectionOfDice aLoadedDie aBoardGame boxesArray aBoard aCard aShip anotherShip manager discardDeck |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 50.
+	aCollectionOfDice add: aLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 2
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: (FiniteCardsManager withDeckSize: 100)
+		              andwithNumberOfLaps: 2.
+	aCard := InstantCard new.
+	aShip := aBoardGame getShipsPlaying at: 1.
+	anotherShip := aBoardGame getShipsPlaying at: 2.
+	aShip addCard: aCard.
+	aBoardGame playCard: aCard fromShip: aShip toTarget: anotherShip.
+	manager := aBoardGame getCardManager.
+	discardDeck := manager getDiscardDeck.
+	self assert: (discardDeck at: 1) equals: aCard
+]
