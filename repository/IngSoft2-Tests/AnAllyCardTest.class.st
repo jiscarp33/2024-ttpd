@@ -24,6 +24,7 @@ AnAllyCardTest >> test_01_WhenAnAllyCardIsAplyThenBothShipsGetsAnActiveCard [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aCard:= AllyCard new.
 	aShip := aBoardGame getShipsPlaying at: 1.
@@ -58,6 +59,7 @@ AnAllyCardTest >> test_02_WhenAnAllyCardIsAplyThenBothKnowTheirAlly [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aShip := aBoardGame getShipsPlaying at: 1.
 	anotherShip := aBoardGame getShipsPlaying at: 2.
@@ -90,6 +92,7 @@ AnAllyCardTest >> test_03_AnAllyCardMessageIsBeingRefactor [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.

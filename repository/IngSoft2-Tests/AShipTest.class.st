@@ -287,6 +287,7 @@ AShipTest >> test_30_WhenAshipHasActiveOverloadCardThenShipIsAffected [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
@@ -318,6 +319,7 @@ AShipTest >> test_31_WhenAShipHasActiveAccelerationCardThenAllShipsAffected [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
@@ -350,6 +352,7 @@ AShipTest >> test_32_WhenAShipRunOutOfFuelAndHasAnAllyThenAllyShareFuel [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+					     withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
@@ -383,6 +386,7 @@ aCard:= AllyCard new.
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aShip := aBoardGame getShipsPlaying at: 1.
 	anotherShip := aBoardGame getShipsPlaying at: 2.

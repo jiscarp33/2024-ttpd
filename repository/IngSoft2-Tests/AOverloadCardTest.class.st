@@ -33,6 +33,7 @@ aCard:= OverloadCard new.
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aShip := aBoardGame getShipsPlaying at: 1.
 	anotherShip := aBoardGame getShipsPlaying at: 2.
@@ -63,6 +64,7 @@ AOverloadCardTest >> test_03_AnOverloadCardMessageIsBeingRefactor [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
