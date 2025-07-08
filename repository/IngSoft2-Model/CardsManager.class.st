@@ -31,3 +31,8 @@ CardsManager >> createACard [
 	
 	^(selectedCard at: 1) new.
 ]
+
+{ #category : 'as yet unclassified' }
+CardsManager >> giveCard [
+	^self createACard 
+]

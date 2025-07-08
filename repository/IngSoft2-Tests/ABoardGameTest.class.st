@@ -845,3 +845,28 @@ ABoardGameTest >> test_34_WhenAShipTryesToPlayAPermanentCardAndItsNotItsTurnThen
 		withMessage: 'You cant play a permanent card when its not your turn.'.
 
 ]
+
+{ #category : 'tests' }
+ABoardGameTest >> test_35_ABoardGameIsCreatedWithACardsManager [
+
+	| aBoardGame aCollectionOfDice aLoadedDie boxesArray aBoard aCardManager |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	boxesArray add: (NoEffectBox inPlace: 5).
+	boxesArray add: (NoEffectBox inPlace: 6).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 5.
+	aCollectionOfDice add: aLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 1
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              andwithNumberOfLaps: 2.
+	aCardManager:=aBoardGame getCardManager.
+	self assert: aBoardGame getLapsToDo equals: 2
+
+]

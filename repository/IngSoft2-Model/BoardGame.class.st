@@ -9,7 +9,8 @@ Class {
 		'playerTurn',
 		'aCollectionOfCards',
 		'maxDieResult',
-		'lastCard'
+		'lastCard',
+		'aCardManager'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -63,6 +64,11 @@ BoardGame >> getBoard [
 ]
 
 { #category : 'as yet unclassified' }
+BoardGame >> getCardManager [
+	^aCardManager 
+]
+
+{ #category : 'as yet unclassified' }
 BoardGame >> getCards [
 ^aCollectionOfCards.
 ]
@@ -90,7 +96,7 @@ BoardGame >> getShipsPlaying [
 { #category : 'initialization' }
 BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aCollectionOfDice andwithNumberOfLaps: aNumberOfLaps [
 
-	| numberOfShips numberOfBoxes maxFuel aShip aCardManager|
+	| numberOfShips numberOfBoxes maxFuel aShip|
 	numberOfShips := aNumberOfShips.
 	numberOfBoxes := aBoard.
 	maxFuel := 0.
@@ -101,8 +107,8 @@ BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aC
 	aCardManager:= CardsManager new.
 	[ numberOfShips ~= 0 ] whileTrue: [
 		aShip := Ship createWithMaxFuel: maxFuel.
-		aShip addCard: aCardManager createACard.
-		aShip addCard: aCardManager createACard.
+		aShip addCard: aCardManager giveCard .
+		aShip addCard: aCardManager giveCard .
 		aCollectionOfShips add: aShip.
 		numberOfShips := numberOfShips - 1 ].
 	board := aBoard.
