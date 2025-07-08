@@ -13,7 +13,7 @@ ABoardGameTest >> should: anErrorBlock raise: anErrorClass withMessage: aMessage
 { #category : 'tests' }
 ABoardGameTest >> test_05_WhenABoardGameIsCreatedThenItHasANumberOfLapsToDo [
 
-	| aBoardGame aCollectionOfDice aLoadedDie boxesArray aBoard |
+	| aBoardGame aCollectionOfDice aLoadedDie boxesArray aBoard aCardManager |
 	boxesArray := OrderedCollection new.
 	boxesArray add: (NoEffectBox  inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
@@ -25,10 +25,13 @@ ABoardGameTest >> test_05_WhenABoardGameIsCreatedThenItHasANumberOfLapsToDo [
 	aCollectionOfDice := OrderedCollection new.
 	aLoadedDie := LoadedDie of: 5.
 	aCollectionOfDice add: aLoadedDie.
+	aCardManager:= CardsManager new.
 	aBoardGame := BoardGame
+
 		              withShip: 1
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager:aCardManager 	
 		              andwithNumberOfLaps: 2.
 	self assert: aBoardGame getLapsToDo equals: 2
 ]
@@ -36,7 +39,7 @@ ABoardGameTest >> test_05_WhenABoardGameIsCreatedThenItHasANumberOfLapsToDo [
 { #category : 'tests' }
 ABoardGameTest >> test_06_WhenTheGameIsPlayedWithMoreThanOneBoxThenTheGameHasAWinner [
 
-	| aBoardGame aCollectionOfDice boxesArray aLoadedDie aBoard |
+	| aBoardGame aCollectionOfDice boxesArray aLoadedDie aBoard aCardManager |
 	boxesArray := OrderedCollection new.
 	boxesArray add: (NoEffectBox inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
@@ -46,10 +49,12 @@ ABoardGameTest >> test_06_WhenTheGameIsPlayedWithMoreThanOneBoxThenTheGameHasAWi
 	aCollectionOfDice := OrderedCollection new.
 	aLoadedDie := LoadedDie of: 3.
 	aCollectionOfDice add: aLoadedDie.
+	aCardManager:= CardsManager new.
 	aBoardGame := BoardGame
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						 withManager:aCardManager
 		              andwithNumberOfLaps: 2.
 	aBoardGame playTurn.
 	aBoardGame playTurn.
@@ -63,7 +68,7 @@ ABoardGameTest >> test_06_WhenTheGameIsPlayedWithMoreThanOneBoxThenTheGameHasAWi
 { #category : 'tests' }
 ABoardGameTest >> test_07_WhenTheGameIsAskedToChangeTurnThenTheTurnIsIncremented [
 
-	| turn aBoard aCollectionOfDice aLoadedDie aBoardGame nextTurn boxesArray |
+	| turn aBoard aCollectionOfDice aLoadedDie aBoardGame nextTurn boxesArray aCardManager |
 	turn := 1.
 
 	boxesArray := OrderedCollection new.
@@ -77,11 +82,14 @@ ABoardGameTest >> test_07_WhenTheGameIsAskedToChangeTurnThenTheTurnIsIncremented
 	aCollectionOfDice := OrderedCollection new.
 	aLoadedDie := LoadedDie of: 102.
 	aCollectionOfDice add: aLoadedDie.
+	aCardManager:= CardsManager new.
 	aBoardGame := BoardGame
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						 withManager:aCardManager
 		              andwithNumberOfLaps: 2.
+	
 
 	nextTurn := aBoardGame changeTurn: turn.
 	self assert: nextTurn equals: 2
@@ -90,7 +98,7 @@ ABoardGameTest >> test_07_WhenTheGameIsAskedToChangeTurnThenTheTurnIsIncremented
 { #category : 'tests' }
 ABoardGameTest >> test_08_WhenAGameFinishesThenRankingIsShown [
 
-	| aBoardGame aCollectionOfDice aLoadedDie expectedRanking ranking boxesArray aBoard |
+	| aBoardGame aCollectionOfDice aLoadedDie expectedRanking ranking boxesArray aBoard aCardManager |
 	boxesArray := OrderedCollection new.
 	boxesArray add: (NoEffectBox  inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
@@ -102,11 +110,14 @@ ABoardGameTest >> test_08_WhenAGameFinishesThenRankingIsShown [
 	aCollectionOfDice := OrderedCollection new.
 	aLoadedDie := LoadedDieWithSequence loadedWithSequence: #( 3 4 5 ).
 	aCollectionOfDice add: aLoadedDie.
+	aCardManager:= CardsManager new.
 	aBoardGame := BoardGame
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						 withManager:aCardManager
 		              andwithNumberOfLaps: 2.
+	
 	expectedRanking := OrderedCollection new.
 	expectedRanking add: 2.
 	expectedRanking add: 1.
@@ -120,7 +131,7 @@ ABoardGameTest >> test_08_WhenAGameFinishesThenRankingIsShown [
 { #category : 'tests' }
 ABoardGameTest >> test_09_ABoardGameWillNotStartWithLessThan1Ship [
 
-	| aCollectionOfDice aDie boxesArray|
+	| aCollectionOfDice aDie boxesArray aCardManager |
 	aCollectionOfDice := OrderedCollection new.
 	aDie := Die of: 3.
 	aCollectionOfDice add: aDie.
@@ -129,12 +140,15 @@ ABoardGameTest >> test_09_ABoardGameWillNotStartWithLessThan1Ship [
 	boxesArray add: (NoEffectBox inPlace: 2).
 	boxesArray add: (NoEffectBox inPlace: 3).
 	boxesArray add: (NoEffectBox inPlace: 4).
+	aCardManager:= CardsManager new.
+
 	self
 		should: [
 			BoardGame
 				withShip: 0
 				withBoard: (Board withBoxesArray: boxesArray)
 				WithDice: aCollectionOfDice
+				withManager:aCardManager
 				andwithNumberOfLaps: 2 ]
 		raise: Error
 		withMessage: 'A Board must have at least 1 ship to be created'
@@ -158,6 +172,7 @@ ABoardGameTest >> test_10_ABoardGameWillNotStartWithLessThan2Laps [
 				withShip: 1
 				withBoard: (Board withBoxesArray: boxesArray)
 				WithDice: aCollectionOfDice
+				withManager: (CardsManager new)
 				andwithNumberOfLaps: 1 ]
 		raise: Error
 		withMessage: 'A Board must have at least 2 laps to be created' 
@@ -181,6 +196,7 @@ ABoardGameTest >> test_11_WhenItIsAPlayerTurnThenPlayerChooseToPlay [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 
 	aBoardGame playTurn.
@@ -205,6 +221,7 @@ ABoardGameTest >> test_12_WhenItIsAPlayerTurnThenPlayerChooseToPassTurn [
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 
 	aBoardGame playTurn.
@@ -233,6 +250,7 @@ ABoardGameTest >> test_14_WhenAnRepeatCardIsPlayedByAShipThenItsRemovedFromTheSh
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aCard := RepeatCard new.
 	aShip := ((aBoardGame getShipsPlaying) at: 1).
@@ -262,6 +280,7 @@ ABoardGameTest >> test_15_WhenAnCancellationCardIsPlayedByAShipThenItsRemovedFro
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+ 						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aCard := CancellationCard new.
 	aPermanentCard := OverloadCard new.
@@ -295,6 +314,7 @@ ABoardGameTest >> test_16_ABoardGameKnowsItMaxDieResult [
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 
 	self assert: aBoardGame getMaxDieResult equals: 92.
@@ -320,6 +340,7 @@ ABoardGameTest >> test_17_WhenAAccelerationCardIsPlayedThenAllShipsGetTheirMoves
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := AccelerationCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
@@ -353,6 +374,7 @@ ABoardGameTest >> test_18_WhenAOverloadCardIsPlayedThenAllShipsGetTheirMovesAffe
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := OverloadCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
@@ -387,6 +409,7 @@ ABoardGameTest >> test_19_WhenAAllyCardIsPlayedThenAllShipsGetTheirMovesAffected
 		              withShip: 2
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := AllyCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
@@ -419,6 +442,7 @@ ABoardGameTest >> test_20_TheGameKnowsTheLastCardBeingPlayed [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aPermanentCard := AllyCard new.
 	aShip := (aBoardGame getShipsPlaying at: 1).
