@@ -33,6 +33,11 @@ CardsManager >> createACard [
 ]
 
 { #category : 'as yet unclassified' }
+CardsManager >> discard: aCard [
+	^self
+]
+
+{ #category : 'as yet unclassified' }
 CardsManager >> giveCard [
 	^self createACard 
 ]

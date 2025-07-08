@@ -29,6 +29,20 @@ BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollect
 		  andwithNumberOfLaps: numberOfLaps
 ]
 
+{ #category : 'as yet unclassified' }
+BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollectionOfDice  withManager: aCardManager andwithNumberOfLaps: numberOfLaps [
+
+	aNumberOfShips < 1 ifTrue: [  Error signal: 'A Board must have at least 1 ship to be created'  ].
+	numberOfLaps < 2 ifTrue: [  Error signal: 'A Board must have at least 2 laps to be created'  ].
+
+	^ self new
+		  initializeWithShips: aNumberOfShips
+		  whithBoard: aBoard
+		  withDice: aCollectionOfDice
+	     withCardManager: aCardManager 
+		  andwithNumberOfLaps: numberOfLaps
+]
+
 { #category : 'adding' }
 BoardGame >> addHyperGravityInformationTo: aBox withDieResult: aDieResult [ 
 	aBox setNumber: aDieResult .
@@ -105,6 +119,32 @@ BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aC
 	maxFuel := maxFuel * 2.
 	aCollectionOfShips := OrderedCollection new.
 	aCardManager:= CardsManager new.
+	[ numberOfShips ~= 0 ] whileTrue: [
+		aShip := Ship createWithMaxFuel: maxFuel.
+		aShip addCard: aCardManager giveCard .
+		aShip addCard: aCardManager giveCard .
+		aCollectionOfShips add: aShip.
+		numberOfShips := numberOfShips - 1 ].
+	board := aBoard.
+	dice := aCollectionOfDice.
+	laps := aNumberOfLaps.
+	playerTurn := 1.
+	aCollectionOfCards := OrderedCollection new
+]
+
+{ #category : 'initialization' }
+BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aCollectionOfDice withCardManager: aManager andwithNumberOfLaps: aNumberOfLaps [
+
+	| numberOfShips numberOfBoxes maxFuel aShip|
+	numberOfShips := aNumberOfShips.
+	numberOfBoxes := aBoard.
+	aCardManager := aManager.
+	maxFuel := 0.
+	aCollectionOfDice do: [ :die | maxFuel := maxFuel + die maximumValue ].
+	maxDieResult := maxFuel.
+	maxFuel := maxFuel * 2.
+	aCollectionOfShips := OrderedCollection new.
+
 	[ numberOfShips ~= 0 ] whileTrue: [
 		aShip := Ship createWithMaxFuel: maxFuel.
 		aShip addCard: aCardManager giveCard .

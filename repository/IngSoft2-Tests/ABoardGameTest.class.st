@@ -867,6 +867,63 @@ ABoardGameTest >> test_35_ABoardGameIsCreatedWithACardsManager [
 		              WithDice: aCollectionOfDice
 		              andwithNumberOfLaps: 2.
 	aCardManager:=aBoardGame getCardManager.
-	self assert: aBoardGame getLapsToDo equals: 2
+	self assert: (aCardManager isKindOf: CardsManager).
 
+]
+
+{ #category : 'tests' }
+ABoardGameTest >> test_36_ABoardGameCanBePlayedWithAFiniteDeck [
+
+	| aCollectionOfDice aLoadedDie aBoardGame boxesArray aBoard anotherLoadedDie aCard aShip anotherShip aPermanentCard |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 50.
+	anotherLoadedDie := LoadedDie of: 40.
+	aCollectionOfDice add: aLoadedDie.
+	aCollectionOfDice add: anotherLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 3
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              andwithNumberOfLaps: 2.
+	aPermanentCard := OverloadCard new.
+	aShip := (aBoardGame getShipsPlaying at: 1).
+	anotherShip := (aBoardGame getShipsPlaying at: 2).
+	anotherShip addCard: aPermanentCard.
+	self should: [
+			aBoardGame
+				playCard: aPermanentCard fromShip: anotherShip toTarget: aShip ]
+		raise: Error
+		withMessage: 'You cant play a permanent card when its not your turn.'.
+
+]
+
+{ #category : 'tests' }
+ABoardGameTest >> test_37_ACardsManagerIsPassWhenABoardGameIsCreated [
+
+	| aBoardGame aCollectionOfDice aLoadedDie boxesArray aBoard aCardManager|
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	boxesArray add: (NoEffectBox inPlace: 5).
+	boxesArray add: (NoEffectBox inPlace: 6).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 5.
+	aCollectionOfDice add: aLoadedDie.
+	aCardManager:= CardsManager new.
+	aBoardGame := BoardGame
+		              withShip: 1
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice 
+						  withManager: aCardManager
+		              andwithNumberOfLaps: 2.
+	self assert: (aBoardGame getCardManager isKindOf: CardsManager). 
 ]
