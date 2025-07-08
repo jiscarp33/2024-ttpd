@@ -10,6 +10,7 @@ CancellationCard >> affectTo: aCard from: aShip playing: aBoardGame [
 	| shipsPlaying |
 	shipsPlaying := aBoardGame getShipsPlaying.
 	shipsPlaying do: [ :ship | ship removeActiveCard: aCard ].
+	aBoardGame getCardManager discard:aCard. 
 	^CancellationCard new.
 	
 ]

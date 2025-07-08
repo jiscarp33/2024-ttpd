@@ -995,3 +995,36 @@ ABoardGameTest >> test_38_WhenAnInstantCardIsPlayedByAShipThenItsRemovedFromTheS
 	discardDeck := manager getDiscardDeck.
 	self assert: (discardDeck at: 1) equals: aCard
 ]
+
+{ #category : 'tests' }
+ABoardGameTest >> test_39_WhenAPermanentCardIsRemoveByACancellationCardPlayedByAShipThenItsRemovedFromTheShipHandAndBothAppearInTheDiscardDeck [ 
+
+	| aCollectionOfDice aLoadedDie aBoardGame boxesArray aBoard aCard aPermanentCard aShip anotherShip discardDeck aManager |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 50.
+	aCollectionOfDice add: aLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 2
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+ 						  withManager: (FiniteCardsManager withDeckSize: 100)
+		              andwithNumberOfLaps: 2.
+	aCard := CancellationCard new.
+	aPermanentCard := OverloadCard new.
+	aShip := ((aBoardGame getShipsPlaying) at: 1).
+	anotherShip := ((aBoardGame getShipsPlaying) at: 2).
+	aShip addCard: aCard.
+	aShip addCard: aPermanentCard.
+	aBoardGame playCard: aPermanentCard fromShip: aShip toTarget: anotherShip.
+	aBoardGame playCard: aCard fromShip: aShip toTarget: aPermanentCard.
+	aManager:= (aBoardGame getCardManager).
+	discardDeck := aManager getDiscardDeck.
+	self assert: (discardDeck at:1) equals: aPermanentCard .
+	self assert:(discardDeck  at:2)equals: aCard. 
+]
