@@ -1,7 +1,7 @@
 Class {
 	#name : #CardsManager,
 	#superclass : #Object,
-	#category : 'IngSoft2-Model'
+	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -29,4 +29,14 @@ CardsManager >> createACard [
         ] ifNone: [aDistributionOfCards last].
 	
 	^(selectedCard at: 1) new.
+]
+
+{ #category : #'as yet unclassified' }
+CardsManager >> discard: aCard [
+	^self
+]
+
+{ #category : #'as yet unclassified' }
+CardsManager >> giveCard [
+	^self createACard 
 ]

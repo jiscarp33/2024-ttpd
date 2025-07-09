@@ -63,7 +63,7 @@ HyperJumpBox >> parsecBoxProportion [
 { #category : #'as yet unclassified' }
 HyperJumpBox >> parsecsToMove [
 	parsecNumber := parsecNumber < parsecList size
-		                ifTrue: [ parsecNumber +  1 ]
+		                ifTrue: [ parsecNumber + 1 ]
 		                ifFalse: [ 1 ].
 	^parsecNumber
 ]
