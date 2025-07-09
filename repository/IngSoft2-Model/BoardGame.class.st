@@ -9,13 +9,14 @@ Class {
 		'playerTurn',
 		'aCollectionOfCards',
 		'maxDieResult',
-		'lastCard'
+		'lastCard',
+		'aCardManager'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
-BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollectionOfDice andwithNumberOfLaps: numberOfLaps [
+BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollectionOfDice  withManager: aCardManager andwithNumberOfLaps: numberOfLaps [
 
 	aNumberOfShips < 1 ifTrue: [  Error signal: 'A Board must have at least 1 ship to be created'  ].
 	numberOfLaps < 2 ifTrue: [  Error signal: 'A Board must have at least 2 laps to be created'  ].
@@ -24,6 +25,7 @@ BoardGame class >> withShip: aNumberOfShips withBoard: aBoard WithDice: aCollect
 		  initializeWithShips: aNumberOfShips
 		  whithBoard: aBoard
 		  withDice: aCollectionOfDice
+	     withCardManager: aCardManager 
 		  andwithNumberOfLaps: numberOfLaps
 ]
 
@@ -62,6 +64,11 @@ BoardGame >> getBoard [
 ]
 
 { #category : #'as yet unclassified' }
+BoardGame >> getCardManager [
+	^aCardManager 
+]
+
+{ #category : #'as yet unclassified' }
 BoardGame >> getCards [
 ^aCollectionOfCards.
 ]
@@ -89,7 +96,7 @@ BoardGame >> getShipsPlaying [
 { #category : #initialization }
 BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aCollectionOfDice andwithNumberOfLaps: aNumberOfLaps [
 
-	| numberOfShips numberOfBoxes maxFuel aShip aCardManager|
+	| numberOfShips numberOfBoxes maxFuel aShip|
 	numberOfShips := aNumberOfShips.
 	numberOfBoxes := aBoard.
 	maxFuel := 0.
@@ -100,8 +107,34 @@ BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aC
 	aCardManager:= CardsManager new.
 	[ numberOfShips ~= 0 ] whileTrue: [
 		aShip := Ship createWithMaxFuel: maxFuel.
-		aShip addCard: aCardManager createACard.
-		aShip addCard: aCardManager createACard.
+		aShip addCard: aCardManager giveCard .
+		aShip addCard: aCardManager giveCard .
+		aCollectionOfShips add: aShip.
+		numberOfShips := numberOfShips - 1 ].
+	board := aBoard.
+	dice := aCollectionOfDice.
+	laps := aNumberOfLaps.
+	playerTurn := 1.
+	aCollectionOfCards := OrderedCollection new
+]
+
+{ #category : #initialization }
+BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aCollectionOfDice withCardManager: aManager andwithNumberOfLaps: aNumberOfLaps [
+
+	| numberOfShips numberOfBoxes maxFuel aShip|
+	numberOfShips := aNumberOfShips.
+	numberOfBoxes := aBoard.
+	aCardManager := aManager.
+	maxFuel := 0.
+	aCollectionOfDice do: [ :die | maxFuel := maxFuel + die maximumValue ].
+	maxDieResult := maxFuel.
+	maxFuel := maxFuel * 2.
+	aCollectionOfShips := OrderedCollection new.
+
+	[ numberOfShips ~= 0 ] whileTrue: [
+		aShip := Ship createWithMaxFuel: maxFuel.
+		aShip addCard: aCardManager giveCard .
+		aShip addCard: aCardManager giveCard .
 		aCollectionOfShips add: aShip.
 		numberOfShips := numberOfShips - 1 ].
 	board := aBoard.
@@ -119,14 +152,18 @@ BoardGame >> passTurn [
 
 { #category : #'as yet unclassified' }
 BoardGame >> playCard: aCard fromShip: aShip toTarget: aTarget [
-    ((aCard isPermanent and: [(aCollectionOfShips indexOf: aShip) = playerTurn]) or: (aCard isInstant or: aCard isRedo))
-        ifTrue: [
-            	lastCard := aCard affectTo:  aTarget from: aShip playing: self.
-				aShip removeCardFromHand: aCard.
-        ]
-        ifFalse: [
-            self error: 'You cant play a permanent card when its not your turn.'
-        ].
+	((aCard isPermanent and: [(aCollectionOfShips indexOf: aShip) = playerTurn])
+		or: (aCard isInstant or: aCard isRedo))
+		ifTrue: [
+			lastCard := aCard affectTo: aTarget from: aShip playing: self.
+			aShip removeCardFromHand: aCard.
+
+			(aCard isInstant or: aCard isRedo)
+				ifTrue: [ aCardManager discard: aCard ].
+		]
+		ifFalse: [
+			self error: 'You cant play a permanent card when its not your turn.'
+		].
 
 ]
 
