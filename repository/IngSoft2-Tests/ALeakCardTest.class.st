@@ -156,3 +156,42 @@ ALeakCardTest >> test_04_WhenALeakCardIsRemoveFromActivesFromTheShipThenAppearIn
 		
 
 ]
+
+{ #category : #running }
+ALeakCardTest >> test_05_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeOfFuelAndWhenIsOutOfFuelTheCardAppearInTheDiscardDeck [
+
+	| aShip anotherShip aCard boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame aFiniteManager |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aFiniteManager:= FiniteCardsManager withDeckSize: 100.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 5.
+	anotherLoadedDie := LoadedDie of: 5.
+	aCollectionOfDice add: aLoadedDie.
+	aCollectionOfDice add: anotherLoadedDie.
+	aFiniteManager:= FiniteCardsManager withDeckSize: 100.
+	aBoardGame := BoardGame
+		              withShip: 2
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+						  withManager: aFiniteManager
+		              andwithNumberOfLaps: 2.
+	aShip := Ship createWithMaxFuel: 15.
+	anotherShip:= Ship createWithMaxFuel: 15.
+	aCard:= LeakCard new.
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	
+	aShip consumeFuel: 10.
+	anotherShip consumeFuel: 10.
+	self assert: aShip getFuel  equals: 5.
+	self assert: anotherShip getFuel equals:15.
+	aBoardGame checkDesactivatedCards: anotherShip.
+	anotherShip consumeFuel: 10.
+	self assert: anotherShip getFuel equals:5.
+	self assert: (aFiniteManager getDiscardDeck at:1) isLeak
+
+]

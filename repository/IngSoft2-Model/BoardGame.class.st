@@ -12,7 +12,7 @@ Class {
 		'lastCard',
 		'aCardManager'
 	],
-	#category : 'IngSoft2-Model'
+	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -55,6 +55,13 @@ lastPlayer :=aCollectionOfShips size.
 
 
 
+]
+
+{ #category : #'as yet unclassified' }
+BoardGame >> checkDesactivatedCards: aShip [
+	|removedCards|
+	removedCards := aShip getAndClearRecentlyDeactivatedCards.
+	removedCards do: [:card | self getCardManager  discard: card ].
 ]
 
 { #category : #'as yet unclassified' }

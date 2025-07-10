@@ -10,7 +10,8 @@ Class {
 		'lastDieResult',
 		'aCollectionOfCards',
 		'aCollectionOfActiveCards',
-		'nitroTurns'
+		'nitroTurns',
+		'recentlyDeactivatedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -118,7 +119,11 @@ Ship >> decrementNitroTurns [
 
 { #category : #'as yet unclassified' }
 Ship >> desactivateLeak [
+	|aLeakCard|
+	aLeakCard := LeakCard new.
+	recentlyDeactivatedCards add: aLeakCard.
 	aCollectionOfActiveCards := aCollectionOfActiveCards reject: [:card | card isLeak ].
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -131,6 +136,15 @@ Ship >> endCursed [
 { #category : #'as yet unclassified' }
 Ship >> getActiveCards [
 	^aCollectionOfActiveCards 
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> getAndClearRecentlyDeactivatedCards [
+	| discarded |
+	discarded := recentlyDeactivatedCards.
+	recentlyDeactivatedCards := OrderedCollection new.
+	^ discarded
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -195,6 +209,7 @@ Ship >> intitializeWithMaxFuel: amountMaxFuel [
 	lastDieResult := 0.
 	aCollectionOfCards :=OrderedCollection new.
 	aCollectionOfActiveCards:=OrderedCollection new.
+	recentlyDeactivatedCards:=OrderedCollection new.
 ]
 
 { #category : #testing }
