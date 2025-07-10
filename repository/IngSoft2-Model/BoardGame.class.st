@@ -94,31 +94,6 @@ BoardGame >> getShipsPlaying [
 ]
 
 { #category : #initialization }
-BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aCollectionOfDice andwithNumberOfLaps: aNumberOfLaps [
-
-	| numberOfShips numberOfBoxes maxFuel aShip|
-	numberOfShips := aNumberOfShips.
-	numberOfBoxes := aBoard.
-	maxFuel := 0.
-	aCollectionOfDice do: [ :die | maxFuel := maxFuel + die maximumValue ].
-	maxDieResult := maxFuel.
-	maxFuel := maxFuel * 2.
-	aCollectionOfShips := OrderedCollection new.
-	aCardManager:= CardsManager new.
-	[ numberOfShips ~= 0 ] whileTrue: [
-		aShip := Ship createWithMaxFuel: maxFuel.
-		aShip addCard: aCardManager giveCard .
-		aShip addCard: aCardManager giveCard .
-		aCollectionOfShips add: aShip.
-		numberOfShips := numberOfShips - 1 ].
-	board := aBoard.
-	dice := aCollectionOfDice.
-	laps := aNumberOfLaps.
-	playerTurn := 1.
-	aCollectionOfCards := OrderedCollection new
-]
-
-{ #category : #initialization }
 BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aCollectionOfDice withCardManager: aManager andwithNumberOfLaps: aNumberOfLaps [
 
 	| numberOfShips numberOfBoxes maxFuel aShip|
@@ -178,7 +153,8 @@ BoardGame >> playTurn [
 			players: aCollectionOfShips
 			playerTurn: playerTurn
 			withDiceResult: dieResult
-			andLaps: laps ].
+			andLaps: laps.
+			(aCollectionOfShips at: playerTurn) decrementNitroTurns .].
 
 	(aCollectionOfShips at: playerTurn) victory ifFalse: [
 		playerTurn := self changeTurn: playerTurn ]

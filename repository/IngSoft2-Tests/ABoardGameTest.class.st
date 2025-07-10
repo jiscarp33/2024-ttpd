@@ -1027,3 +1027,34 @@ ABoardGameTest >> test_39_WhenAPermanentCardIsRemoveByACancellationCardPlayedByA
 	self assert: (discardDeck at:1) equals: aPermanentCard .
 	self assert:(discardDeck  at:2)equals: aCard. 
 ]
+
+{ #category : #tests }
+ABoardGameTest >> test_39_WhenAShipPlayTurnAndHasNitroThenTheNitroTurnsDecrease [
+
+	| aCollectionOfDice aLoadedDie aBoardGame boxesArray aBoard aCard  aShip anotherShip   |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 3.
+	aCollectionOfDice add: aLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 2
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+ 						  withManager: (FiniteCardsManager withDeckSize: 100)
+		              andwithNumberOfLaps: 2.
+	aCard := NitroCard  new.
+	aShip := ((aBoardGame getShipsPlaying) at: 1).
+	anotherShip := ((aBoardGame getShipsPlaying) at: 2).
+	aShip addCard: aCard.
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	aBoardGame playTurn.
+	aBoardGame playTurn.
+	anotherShip throwDice: aCollectionOfDice.
+	self assert: anotherShip getNitroTurns equals: 2.
+
+]
