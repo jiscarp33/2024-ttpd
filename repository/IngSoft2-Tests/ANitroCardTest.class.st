@@ -1,17 +1,16 @@
 Class {
-	#name : #ARedoCardTest,
+	#name : #ANitroCardTest,
 	#superclass : #TestCase,
-	#category : 'IngSoft2-Tests'
+	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #tests }
-ARedoCardTest >> test_01_aRedoCardIsImplementedBasedOnTheLastCardPlayed [
-	
-	| anOverloadCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying aRedoCard |
-	anOverloadCard := OverloadCard new.
-	aRedoCard := RedoCard new.
+{ #category : #running }
+ANitroCardTest >> test_01_WhenANitroCardIsApliedTheShipHas3TurnsWithNitro [
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying |
+	aNitroCard := NitroCard new.
 	boxesArray := OrderedCollection new.
-	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
 	boxesArray add: (NoEffectBox inPlace: 3).
 	boxesArray add: (NoEffectBox inPlace: 4).
@@ -25,13 +24,15 @@ ARedoCardTest >> test_01_aRedoCardIsImplementedBasedOnTheLastCardPlayed [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
-						  withManager: (CardsManager new)
+		              withManager: CardsManager new
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
-	anotherShip := shipsPlaying at: 2. 
-	aBoardGame playCard: anOverloadCard fromShip: aShip toTarget: anotherShip.
+	anotherShip := shipsPlaying at: 2.
+	aNitroCard affectTo: anotherShip from: aShip playing: aBoardGame.
+
 	
-	self assert: ((aRedoCard affectTo: anotherShip from: aShip playing: aBoardGame) isKindOf: OverloadCard). 
 	
+	
+	self assert: anotherShip getNitroTurns equals: 3
 ]

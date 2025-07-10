@@ -9,7 +9,8 @@ Class {
 		'state',
 		'lastDieResult',
 		'aCollectionOfCards',
-		'aCollectionOfActiveCards'
+		'aCollectionOfActiveCards',
+		'nitroTurns'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -30,6 +31,11 @@ Ship >> > anotherShip [
 { #category : #'as yet unclassified' }
 Ship >> MyFirstAlly [
 	aCollectionOfActiveCards do:[:aCard| aCard powerMove =0 ifTrue:[ ^(aCard getAlly)] ]
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> activateNitro [
+	nitroTurns:=3.
 ]
 
 { #category : #adding }
@@ -101,6 +107,11 @@ Ship >> decreaseLaps [
 ]
 
 { #category : #'as yet unclassified' }
+Ship >> decrementNitroTurns [
+	nitroTurns := (nitroTurns - 1) max: 0.
+]
+
+{ #category : #'as yet unclassified' }
 Ship >> endCursed [
 	state := Playing new.
 	self moves: lastDieResult.
@@ -138,6 +149,11 @@ Ship >> getMaxFuel [
 ]
 
 { #category : #'as yet unclassified' }
+Ship >> getNitroTurns [
+	^nitroTurns 
+]
+
+{ #category : #'as yet unclassified' }
 Ship >> getPosition [
 	^position.
 ]
@@ -158,6 +174,7 @@ Ship >> intitializeWithMaxFuel: amountMaxFuel [
 	position:= 1.
 	fuel:= amountMaxFuel.
 	maxFuel:= amountMaxFuel.
+	nitroTurns :=0.
 	laps:= 1.
 	state := Playing new.
 	lastDieResult := 0.
@@ -168,6 +185,11 @@ Ship >> intitializeWithMaxFuel: amountMaxFuel [
 { #category : #testing }
 Ship >> isCursed [
 	state := Jail new.
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> modifierForDiceRoll [
+	^ nitroTurns > 0 ifTrue: [ 3 ] ifFalse: [ 0 ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -234,7 +256,7 @@ Ship >> throwDice: aCollectionOfDice [
 	aCollectionOfDice do: [ :die |
 	 positionsToMove := positionsToMove + (die throw). ].
 	lastDieResult := positionsToMove.	
-	^positionsToMove.
+	^positionsToMove + self modifierForDiceRoll.
 ]
 
 { #category : #'as yet unclassified' }
