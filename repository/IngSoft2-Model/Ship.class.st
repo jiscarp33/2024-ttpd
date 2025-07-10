@@ -117,6 +117,11 @@ Ship >> decrementNitroTurns [
 ]
 
 { #category : #'as yet unclassified' }
+Ship >> desactivateLeak [
+	aCollectionOfActiveCards := aCollectionOfActiveCards reject: [:card | card isLeak ].
+]
+
+{ #category : #'as yet unclassified' }
 Ship >> endCursed [
 	state := Playing new.
 	self moves: lastDieResult.

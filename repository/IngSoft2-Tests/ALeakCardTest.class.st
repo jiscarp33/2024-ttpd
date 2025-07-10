@@ -15,7 +15,7 @@ ALeakCardTest >> test_01_ALeakCardIsCreated [
 ]
 
 { #category : #running }
-ALeakCardTest >> test_01_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeOfFuel [
+ALeakCardTest >> test_01_WhenALeakCardIsPlayedThenTheTargetShipHasLeakCardInActives [
 
 | aCard aShip anotherShip boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame |
 	boxesArray := OrderedCollection new.
@@ -103,14 +103,17 @@ ALeakCardTest >> test_03_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeO
 		              WithDice: aCollectionOfDice
 						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
-	aShip := Ship createWithMaxFuel: 1000.
-	anotherShip:= Ship createWithMaxFuel: 1000.
+	aShip := Ship createWithMaxFuel: 15.
+	anotherShip:= Ship createWithMaxFuel: 15.
 	aCard:= LeakCard new.
 	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
 	
 	aShip consumeFuel: 10.
 	anotherShip consumeFuel: 10.
-	self assert: aShip getFuel  equals: 990.
-	self assert: anotherShip getFuel equals:980
+	self assert: aShip getFuel  equals: 5.
+	self assert: anotherShip getFuel equals:15.
+	anotherShip consumeFuel: 10.
+		self assert: anotherShip getFuel equals:5.
+		
 
 ]
