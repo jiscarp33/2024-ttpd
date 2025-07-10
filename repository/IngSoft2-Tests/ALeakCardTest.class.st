@@ -117,3 +117,42 @@ ALeakCardTest >> test_03_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeO
 		
 
 ]
+
+{ #category : #running }
+ALeakCardTest >> test_04_WhenALeakCardIsRemoveFromActivesFromTheShipThenAppearInTheDiscardDeck [
+
+	| aShip anotherShip aCard boxesArray aBoard aCollectionOfDice aLoadedDie  aBoardGame aFiniteManager anotherCard |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 3.
+
+	aCollectionOfDice add: aLoadedDie.
+
+	aFiniteManager:= FiniteCardsManager withDeckSize: 100.
+	aBoardGame := BoardGame
+		              withShip: 2
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+						  withManager: aFiniteManager 
+		              andwithNumberOfLaps: 2.
+	aShip := aBoardGame getShipsPlaying at:1.
+	anotherShip:=  aBoardGame getShipsPlaying at:2.
+	aCard:= LeakCard new.
+	anotherCard:=CancellationCard new.
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
+
+	anotherCard affectTo: aCard  from: anotherShip  playing: aBoardGame .
+
+	aBoardGame playTurn .
+	
+
+	self assert: (aFiniteManager getDiscardDeck at:1) isLeak.
+
+		
+
+]
