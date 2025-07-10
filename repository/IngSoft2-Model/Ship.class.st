@@ -29,8 +29,9 @@ Ship >> > anotherShip [
 ]
 
 { #category : #'as yet unclassified' }
-Ship >> MyFirstAlly [
-	aCollectionOfActiveCards do:[:aCard| aCard powerMove =0 ifTrue:[ ^(aCard getAlly)] ]
+Ship >> MyFirstAlly [ 
+	aCollectionOfActiveCards do: [:aCard | 	aCard isAlly ifTrue: [ ^aCard getAlly ] ].
+
 ]
 
 { #category : #'as yet unclassified' }
