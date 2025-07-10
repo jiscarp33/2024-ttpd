@@ -39,6 +39,11 @@ AllyCard >> initializeWith: aShip [
 	ally:=aShip.
 ]
 
+{ #category : #testing }
+AllyCard >> isAlly [
+	^true
+]
+
 { #category : #'as yet unclassified' }
 AllyCard >> powerMove [
 ^0.

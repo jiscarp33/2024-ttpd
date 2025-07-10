@@ -55,8 +55,8 @@ Ship >> changeStateToPlay [
 
 { #category : #'as yet unclassified' }
 Ship >> checkAlly [
-	(aCollectionOfActiveCards isEmpty) ifTrue: [^false ].
-	aCollectionOfActiveCards do:[:aCard| ((aCard powerMove) = 0) ifTrue: [^true ]]
+	^ aCollectionOfActiveCards anySatisfy: [:card | card isAlly ].
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -81,13 +81,17 @@ Ship >> checkTurn [
 
 { #category : #'as yet unclassified' }
 Ship >> consumeFuel: amount [
+	| adjustedAmount |
 
-	fuel - amount > 0
-		ifTrue: [ fuel := fuel - amount ]
+	adjustedAmount := self hasLeak ifTrue: [ amount * 2 ] ifFalse: [ amount ].
+	
+	fuel - adjustedAmount   > 0
+		ifTrue: [ fuel := fuel - adjustedAmount  ]
 		ifFalse: [
 			self checkAlly
-				ifTrue: [ self consumeFuelFromAlly: fuel - amount ]
-				ifFalse: [ self runOutOfFuel ] ]
+				ifTrue: [ self consumeFuelFromAlly: fuel - adjustedAmount  ]
+				ifFalse: [ self runOutOfFuel.
+					self hasLeak ifTrue: [ self desactivateLeak ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -161,6 +165,11 @@ Ship >> getPosition [
 { #category : #'as yet unclassified' }
 Ship >> getState [
 	^state.
+]
+
+{ #category : #testing }
+Ship >> hasLeak [
+^ aCollectionOfActiveCards anySatisfy: [:card | card isLeak ].
 ]
 
 { #category : #'as yet unclassified' }

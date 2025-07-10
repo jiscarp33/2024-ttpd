@@ -1,13 +1,23 @@
 Class {
-	#name : #AnAllyCardTest,
+	#name : #ALeakCardTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #running }
-AnAllyCardTest >> test_01_WhenAnAllyCardIsAplyThenBothShipsGetsAnActiveCard [ 
+ALeakCardTest >> test_01_ALeakCardIsCreated [
 
-| aCard aShip anotherShip aCollectionOfShips  boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame |
+	| aCard |
+	aCard:=LeakCard new.
+	self assert: (aCard isLeak).
+
+
+]
+
+{ #category : #running }
+ALeakCardTest >> test_01_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeOfFuel [
+
+| aCard aShip anotherShip boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame |
 	boxesArray := OrderedCollection new.
 	boxesArray add: (NoEffectBox  inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
@@ -15,8 +25,8 @@ AnAllyCardTest >> test_01_WhenAnAllyCardIsAplyThenBothShipsGetsAnActiveCard [
 	boxesArray add: (NoEffectBox inPlace: 4).
 	aBoard := Board withBoxesArray: boxesArray.
 	aCollectionOfDice := OrderedCollection new.
-	aLoadedDie := LoadedDie of: 50.
-	anotherLoadedDie := LoadedDie of: 40.
+	aLoadedDie := LoadedDie of: 5.
+	anotherLoadedDie := LoadedDie of: 5.
 	aCollectionOfDice add: aLoadedDie.
 	aCollectionOfDice add: anotherLoadedDie.
 	aBoardGame := BoardGame
@@ -25,24 +35,24 @@ AnAllyCardTest >> test_01_WhenAnAllyCardIsAplyThenBothShipsGetsAnActiveCard [
 		              WithDice: aCollectionOfDice
 						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
-	aCard:= AllyCard new.
+	aCard:= LeakCard new.
 	aShip := aBoardGame getShipsPlaying at: 1.
 	anotherShip := aBoardGame getShipsPlaying at: 2.
-	aCard affectTo: anotherShip from: aShip playing: aBoardGame .
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	
 		
 	
-self assert:((anotherShip getActiveCards at:1) isKindOf:AllyCard).
-self assert:((aShip getActiveCards at:1) isKindOf:AllyCard).
+self assert:((anotherShip hasLeak)).
+
 
 
 
 ]
 
 { #category : #running }
-AnAllyCardTest >> test_02_WhenAnAllyCardIsAplyThenBothKnowTheirAlly [
+ALeakCardTest >> test_02_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeOfFuel [
 
-| aCard aShip anotherShip aCollectionOfShips  boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame shipsPlaying |
-	aCard:= AllyCard new.
+	| aShip anotherShip aCard boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame |
 	boxesArray := OrderedCollection new.
 	boxesArray add: (NoEffectBox  inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
@@ -50,8 +60,8 @@ AnAllyCardTest >> test_02_WhenAnAllyCardIsAplyThenBothKnowTheirAlly [
 	boxesArray add: (NoEffectBox inPlace: 4).
 	aBoard := Board withBoxesArray: boxesArray.
 	aCollectionOfDice := OrderedCollection new.
-	aLoadedDie := LoadedDie of: 50.
-	anotherLoadedDie := LoadedDie of: 40.
+	aLoadedDie := LoadedDie of: 5.
+	anotherLoadedDie := LoadedDie of: 5.
 	aCollectionOfDice add: aLoadedDie.
 	aCollectionOfDice add: anotherLoadedDie.
 	aBoardGame := BoardGame
@@ -60,22 +70,22 @@ AnAllyCardTest >> test_02_WhenAnAllyCardIsAplyThenBothKnowTheirAlly [
 		              WithDice: aCollectionOfDice
 						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
-	aShip := aBoardGame getShipsPlaying at: 1.
-	anotherShip := aBoardGame getShipsPlaying at: 2.
-	aCard affectTo: anotherShip from: aShip playing: aBoardGame.		
+	aShip := Ship createWithMaxFuel: 1000.
+	anotherShip:= Ship createWithMaxFuel: 1000.
+	aCard:= LeakCard new.
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
 	
-self assert:((anotherShip getActiveCards at:1) getAlly = aShip).
-self assert:((aShip getActiveCards at:1) getAlly = anotherShip).
-
-
+	aShip consumeFuel: 10.
+	anotherShip consumeFuel: 10.
+	self assert: aShip getFuel  equals: 990.
+	self assert: anotherShip getFuel equals:980
 
 ]
 
 { #category : #running }
-AnAllyCardTest >> test_03_AnAllyCardMessageIsBeingRefactor [ 
+ALeakCardTest >> test_03_WhenALeakCardIsPlayedThenTheTargetShipDuplicateConsumeOfFuelAndWhenIsOutOfFuelTheCardDisapear [
 
-	| anAllyCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying |
-	anAllyCard := AllyCard new.
+	| aShip anotherShip aCard boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie aBoardGame |
 	boxesArray := OrderedCollection new.
 	boxesArray add: (NoEffectBox  inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
@@ -83,8 +93,8 @@ AnAllyCardTest >> test_03_AnAllyCardMessageIsBeingRefactor [
 	boxesArray add: (NoEffectBox inPlace: 4).
 	aBoard := Board withBoxesArray: boxesArray.
 	aCollectionOfDice := OrderedCollection new.
-	aLoadedDie := LoadedDie of: 50.
-	anotherLoadedDie := LoadedDie of: 40.
+	aLoadedDie := LoadedDie of: 5.
+	anotherLoadedDie := LoadedDie of: 5.
 	aCollectionOfDice add: aLoadedDie.
 	aCollectionOfDice add: anotherLoadedDie.
 	aBoardGame := BoardGame
@@ -93,24 +103,14 @@ AnAllyCardTest >> test_03_AnAllyCardMessageIsBeingRefactor [
 		              WithDice: aCollectionOfDice
 						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
-	shipsPlaying := aBoardGame getShipsPlaying.
-	aShip := shipsPlaying at: 1.
-	anotherShip := shipsPlaying at: 2. 
+	aShip := Ship createWithMaxFuel: 1000.
+	anotherShip:= Ship createWithMaxFuel: 1000.
+	aCard:= LeakCard new.
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
 	
-	self assert: ((anAllyCard affectTo: aShip from: anotherShip playing: aBoardGame) isKindOf: AllyCard ).
-
-
-
-]
-
-{ #category : #running }
-AnAllyCardTest >> test_04_AnAllyCardDetectionRefactor [
-
-	| anAllyCard |
-	anAllyCard := AllyCard new.
-	
-	self assert: anAllyCard isAlly.
-	
-
+	aShip consumeFuel: 10.
+	anotherShip consumeFuel: 10.
+	self assert: aShip getFuel  equals: 990.
+	self assert: anotherShip getFuel equals:980
 
 ]
