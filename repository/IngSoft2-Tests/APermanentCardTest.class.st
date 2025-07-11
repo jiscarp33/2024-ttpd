@@ -32,3 +32,11 @@ APermanentCardTest >> test_06_WhenAPermanentCardIsAskedIfIsInstatThenTheAnswerIs
 	aCard := PermanentCard new.
 	self deny: aCard isInstant.
 ]
+
+{ #category : #running }
+APermanentCardTest >> test_07_WhenAPermanentCardIsAskedIfIsTypeAllyThenTheAnswerIsFalse [
+
+	| aCard |
+	aCard := PermanentCard new.
+	self deny: aCard isAlly.
+]

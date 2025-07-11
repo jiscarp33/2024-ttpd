@@ -1,7 +1,7 @@
 Class {
 	#name : #ACardsManagerTest,
 	#superclass : #TestCase,
-	#category : 'IngSoft2-Tests'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
@@ -19,9 +19,8 @@ ACardsManagerTest >> test_01_ACardManagerGivesARandomCardWithUniformProbabilitie
 ACardsManagerTest >> test_02_ACardManagerDiscardACardAndDoNotRaiseAnError [
 
 	| aCardManager aCard |
-	aCardManager:= CardsManager new.
-	
-	aCard:= aCardManager createACard.
-	
-	self shouldnt: [ aCardManager discard: aCard ] raise: Error.
+	aCardManager := CardsManager new.
+
+	aCard := aCardManager createACard.
+	aCardManager discard: aCard
 ]
