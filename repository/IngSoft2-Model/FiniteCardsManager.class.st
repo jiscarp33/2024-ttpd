@@ -20,11 +20,6 @@ FiniteCardsManager >> discard: aCard [
 ]
 
 { #category : #'as yet unclassified' }
-FiniteCardsManager >> getCards [
-	^deck
-]
-
-{ #category : #'as yet unclassified' }
 FiniteCardsManager >> getDeck [
 	^deck
 ]

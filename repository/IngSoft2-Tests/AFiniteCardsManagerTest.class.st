@@ -18,7 +18,7 @@ AFiniteCardsManagerTest >> test_03_AFiniteCardsManagerCreateAFiniteDeckWithCards
 
 | finiteManager aCard|
 finiteManager:= FiniteCardsManager withDeckSize: 20.
-aCard:=finiteManager getCards at: 1.
+aCard:=finiteManager getDeck  at: 1.
 
 self assert: (aCard isKindOf: Card).
 ]
