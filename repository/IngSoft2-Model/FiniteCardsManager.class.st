@@ -6,7 +6,7 @@ Class {
 		'deck',
 		'discartDeck'
 	],
-	#category : 'IngSoft2-Model'
+	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -21,6 +21,11 @@ FiniteCardsManager >> discard: aCard [
 
 { #category : #'as yet unclassified' }
 FiniteCardsManager >> getCards [
+	^deck
+]
+
+{ #category : #'as yet unclassified' }
+FiniteCardsManager >> getDeck [
 	^deck
 ]
 

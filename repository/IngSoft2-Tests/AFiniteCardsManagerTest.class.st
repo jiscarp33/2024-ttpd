@@ -1,7 +1,7 @@
 Class {
 	#name : #AFiniteCardsManagerTest,
 	#superclass : #TestCase,
-	#category : 'IngSoft2-Tests'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #running }
@@ -71,4 +71,20 @@ AFiniteCardsManagerTest >> test_08_WhenNoCardsInDeckAndDiscardDeckNoCardGiven [
 	| finiteManager |
 	finiteManager := FiniteCardsManager withDeckSize: 0.
 	self assert:  finiteManager giveCard equals: nil.
+]
+
+{ #category : #running }
+AFiniteCardsManagerTest >> test_09_ACardManagerHasTheNewCards [
+
+	| manager deck hasNitro hasLeak |
+	
+	manager := FiniteCardsManager withDeckSize: 100.
+	deck := manager getDeck. 
+
+	hasNitro := deck anySatisfy: [:card | card isKindOf: NitroCard ].
+	hasLeak := deck anySatisfy: [:card | card isKindOf: LeakCard ].
+
+	self assert: hasNitro.
+	self assert: hasLeak.
+
 ]
