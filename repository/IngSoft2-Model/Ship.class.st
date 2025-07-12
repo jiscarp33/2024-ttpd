@@ -85,7 +85,7 @@ Ship >> checkTurn [
 Ship >> consumeFuel: amount [
 	| adjustedAmount |
 
-	adjustedAmount := self hasLeak ifTrue: [ amount * 2 ] ifFalse: [ amount ].
+	adjustedAmount := amount * self leakMultiplier.
 	
 	fuel - adjustedAmount   > 0
 		ifTrue: [ fuel := fuel - adjustedAmount  ]
@@ -215,6 +215,14 @@ Ship >> intitializeWithMaxFuel: amountMaxFuel [
 { #category : #testing }
 Ship >> isCursed [
 	state := Jail new.
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> leakMultiplier [
+	| leakCount |
+	leakCount := aCollectionOfActiveCards count: [:card | card isLeak ].
+	^ 2 raisedTo: leakCount.
+
 ]
 
 { #category : #'as yet unclassified' }

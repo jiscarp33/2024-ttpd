@@ -7,6 +7,13 @@ Class {
 { #category : #'as yet unclassified' }
 NitroCard >> affectTo: aTargetShip from: aSourceShip playing: aBoardGame [
 
-    aTargetShip activateNitro.
+   aTargetShip activateNitro.
+	aBoardGame getCardManager discard:self. 
+	^NitroCard  new.
 
+]
+
+{ #category : #testing }
+NitroCard >> isNitro [
+	^true.
 ]
