@@ -11,8 +11,7 @@ Class {
 		'aCollectionOfCards',
 		'aCollectionOfActiveCards',
 		'nitroTurns',
-		'recentlyDeactivatedCards',
-		'fuelState'
+		'recentlyDeactivatedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
