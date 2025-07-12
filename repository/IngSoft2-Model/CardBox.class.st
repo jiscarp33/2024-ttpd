@@ -2,7 +2,6 @@ Class {
 	#name : #CardBox,
 	#superclass : #Box,
 	#instVars : [
-		'myCardManager',
 		'cardManager'
 	],
 	#category : #'IngSoft2-Model'
@@ -22,13 +21,13 @@ CardBox >> effectShips: aCollectionOfShips playing: aShip [
 
 { #category : #'as yet unclassified' }
 CardBox >> getCardManager [
-	^myCardManager.
+	^cardManager.
 ]
 
 { #category : #initialization }
 CardBox >> initializeInPlace: aPosition [
 	place := aPosition.
-	myCardManager := CardsManager new.
+	
 ]
 
 { #category : #'as yet unclassified' }

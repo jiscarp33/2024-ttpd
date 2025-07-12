@@ -112,7 +112,7 @@ BoardGame >> initializeWithShips: aNumberOfShips whithBoard: aBoard withDice: aC
 	maxDieResult := maxFuel.
 	maxFuel := maxFuel * 2.
 	aCollectionOfShips := OrderedCollection new.
-
+	aBoard useCardManager: aCardManager.
 	[ numberOfShips ~= 0 ] whileTrue: [
 		aShip := Ship createWithMaxFuel: maxFuel.
 		aShip addCard: aCardManager giveCard .

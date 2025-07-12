@@ -83,3 +83,13 @@ Board >> players: aCollectionOfShips playerTurn: aPlayerTurn withDiceResult: aDi
 	self checkAfterEffects: aCollectionOfShips.
 	aShip checkIfWin: laps
 ]
+
+{ #category : #'as yet unclassified' }
+Board >> useCardManager: aCardManager [
+    boxes do: [:box |
+        (box respondsTo: #useCardManager:) ifTrue: [
+            box useCardManager: aCardManager
+        ]
+    ].
+
+]
