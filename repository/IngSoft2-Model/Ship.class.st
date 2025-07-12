@@ -11,7 +11,8 @@ Class {
 		'aCollectionOfCards',
 		'aCollectionOfActiveCards',
 		'nitroTurns',
-		'recentlyDeactivatedCards'
+		'recentlyDeactivatedCards',
+		'fuelState'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -105,6 +106,11 @@ Ship >> consumeFuelFromAlly: anAmount [
 			self runOutOfFuel.
 			anAlly runOutOfFuel.
 		 ]
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> countLeakCards [
+^ aCollectionOfActiveCards count: [:card | card isLeak].
 ]
 
 { #category : #'as yet unclassified' }
@@ -204,6 +210,7 @@ Ship >> intitializeWithMaxFuel: amountMaxFuel [
 	fuel:= amountMaxFuel.
 	maxFuel:= amountMaxFuel.
 	nitroTurns :=0.
+
 	laps:= 1.
 	state := Playing new.
 	lastDieResult := 0.
