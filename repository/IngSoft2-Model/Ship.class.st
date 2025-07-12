@@ -37,7 +37,7 @@ Ship >> MyFirstAlly [
 
 { #category : #'as yet unclassified' }
 Ship >> activateNitro [
-	nitroTurns:=3.
+	nitroTurns:= nitroTurns + 3.
 ]
 
 { #category : #adding }
