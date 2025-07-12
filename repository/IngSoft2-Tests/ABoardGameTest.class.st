@@ -1,7 +1,7 @@
 Class {
 	#name : #ABoardGameTest,
 	#superclass : #TestCase,
-	#category : 'IngSoft2-Tests'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #asserting }
@@ -1056,5 +1056,98 @@ ABoardGameTest >> test_39_WhenAShipPlayTurnAndHasNitroThenTheNitroTurnsDecrease 
 	aBoardGame playTurn.
 	anotherShip throwDice: aCollectionOfDice.
 	self assert: anotherShip getNitroTurns equals: 2.
+
+]
+
+{ #category : #tests }
+ABoardGameTest >> test_40_ABoardGameWithOutRewardsForTest [
+
+	| cardManager aShip    aBoardGame aBoard    boxesArray  aCollectionOfDice aLoadedDie  inicialMaxFuel |
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 3.
+	aCollectionOfDice add: aLoadedDie.
+
+	cardManager := FiniteCardsManager withDeckSize: 100.
+
+	boxesArray := OrderedCollection new.
+	1 to: 5 do: [:i | boxesArray add: (NoEffectBox inPlace: i)].
+	aBoard := Board withBoxesArray: boxesArray.	
+	aBoardGame := BoardGame
+		withShip: 2
+		withBoard: aBoard
+		WithDice: aCollectionOfDice 
+		withManager: cardManager
+		andwithNumberOfLaps: 10.
+ 
+	aShip := aBoardGame getShipsPlaying at:1. 
+	inicialMaxFuel:= aShip getMaxFuel.
+	self assert: aShip getFuel equals: inicialMaxFuel .
+	aBoardGame playTurnWithOutReward.
+	self assert: aShip getFuel equals: 5.
+	aBoardGame playTurnWithOutReward.
+	aBoardGame playTurnWithOutReward.
+	self assert: aShip getMaxFuel  equals: inicialMaxFuel .
+		
+]
+
+{ #category : #tests }
+ABoardGameTest >> test_41_ABoardGameWithAllNewImplementations [ 
+
+	| cardManager aShip nitro1  leak1 aBoardGame aBoard aDice  fuelBefore boxesArray positionsToMove aCollectionOfDice aLoadedDie anotherShip |
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 3.
+	aCollectionOfDice add: aLoadedDie.
+
+	cardManager := FiniteCardsManager withDeckSize: 100.
+
+	boxesArray := OrderedCollection new.
+	1 to: 15 do: [:i | boxesArray add: (NoEffectBox inPlace: i)].
+	aBoard := Board withBoxesArray: boxesArray.	
+	aBoardGame := BoardGame
+		withShip: 2
+		withBoard: aBoard
+		WithDice: aCollectionOfDice 
+		withManager: cardManager
+		andwithNumberOfLaps: 10.
+
+	aShip := aBoardGame getShipsPlaying at:1. 
+	anotherShip:=aBoardGame getShipsPlaying at:2.
+
+	nitro1 := NitroCard new.
+	leak1 := LeakCard new.
+
+
+	nitro1 affectTo: aShip from:   anotherShip playing: aBoardGame.
+	leak1 affectTo: anotherShip from: aShip playing: aBoardGame .
+	self assert:  (cardManager getDiscardDeck at:1) isNitro.
+		
+	fuelBefore:= aShip getFuel.
+
+	aBoardGame playTurnWithOutReward . "saca 3 y obtiene 6, consume 6, le queda 3"
+	self assert: aShip getFuel equals: (fuelBefore - 6).
+	aBoardGame playTurnWithOutReward . "saca 3 y consume 6"
+	self assert: anotherShip  getFuel equals: (fuelBefore - 6).
+	
+	aBoardGame playTurnWithOutReward. "se queda sin combustible"
+	aBoardGame playTurnWithOutReward. "se queda sin combustible"
+	
+	aBoardGame playTurnWithOutReward."cumplen el turno perdido"
+	aBoardGame playTurnWithOutReward."se queda sin leak pero cumple turno"
+	aBoardGame playTurnWithOutReward."cumplen el turno perdido"
+	aBoardGame playTurnWithOutReward."se queda sin leak pero cumple turno"
+	
+	aBoardGame playTurnWithOutReward."ultima chance de nitro"
+	aBoardGame playTurnWithOutReward ."ya no tiene leak"
+	
+	self assert: aShip getFuel equals: fuelBefore - 6.
+	self assert: anotherShip getFuel  equals: fuelBefore -3. 
+
+
+	self assert: (cardManager getDiscardDeck at:2) isLeak.
+	
+	
+
+
+
 
 ]

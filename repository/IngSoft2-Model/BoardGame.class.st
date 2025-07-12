@@ -152,18 +152,38 @@ BoardGame >> playCard: aCard fromShip: aShip toTarget: aTarget [
 { #category : #'as yet unclassified' }
 BoardGame >> playTurn [
 
-	| dieResult |
-	(aCollectionOfShips at: playerTurn) checkTurn ifTrue: [
-		dieResult := (aCollectionOfShips at: playerTurn) throwDice: dice.
-		(aCollectionOfShips at: playerTurn) checkReward: dieResult withMax: maxDieResult.
+	| dieResult aShip |
+	aShip:=aCollectionOfShips   at:playerTurn.
+	(aShip) checkTurn ifTrue: [
+		dieResult := aShip throwDice: dice.
+		aShip checkReward: dieResult withMax: maxDieResult.
+		board
+			players: aCollectionOfShips
+			playerTurn: playerTurn
+			withDiceResult: dieResult
+			andLaps: laps.
+			aShip  decrementNitroTurns .].
+	self checkDesactivatedCards: aShip.
+	aShip victory ifFalse: [
+		playerTurn := self changeTurn: playerTurn ]
+]
+
+{ #category : #'as yet unclassified' }
+BoardGame >> playTurnWithOutReward [
+
+	| dieResult aShip|
+	aShip:=(aCollectionOfShips at:playerTurn).
+	
+	aShip checkTurn ifTrue: [
+		dieResult := aShip  throwDice: dice.
 		board
 			players: aCollectionOfShips
 			playerTurn: playerTurn
 			withDiceResult: dieResult
 			andLaps: laps.
 			(aCollectionOfShips at: playerTurn) decrementNitroTurns .].
-
-	(aCollectionOfShips at: playerTurn) victory ifFalse: [
+	self checkDesactivatedCards: aShip.
+	aShip victory ifFalse: [
 		playerTurn := self changeTurn: playerTurn ]
 ]
 
