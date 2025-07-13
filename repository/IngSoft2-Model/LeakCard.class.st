@@ -9,7 +9,7 @@ LeakCard >> affectTo: aShip from: aShip2 playing: aBoardGame [
 
 	aShip addActiveCards: self.
 
-	^ LeakCard new.
+	^ self.
 ]
 
 { #category : #testing }

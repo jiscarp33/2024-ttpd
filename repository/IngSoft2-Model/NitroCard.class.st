@@ -9,7 +9,7 @@ NitroCard >> affectTo: aTargetShip from: aSourceShip playing: aBoardGame [
 
    aTargetShip activateNitro.
 	aBoardGame getCardManager discard:self. 
-	^NitroCard  new.
+	^self.
 
 ]
 
