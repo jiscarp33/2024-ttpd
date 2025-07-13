@@ -1152,3 +1152,38 @@ ABoardGameTest >> test_41_ABoardGameWithAllNewImplementations [
 
 
 ]
+
+{ #category : #tests }
+ABoardGameTest >> test_42_ABoardGameRefactor [ 
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie  shipsPlaying     anotherNitroCard    aManager |
+	aNitroCard := NitroCard new.
+	anotherNitroCard:=NitroCard new.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (CardBox  inPlace: 2).
+	boxesArray add: (CardBox  inPlace: 3).
+	boxesArray add: (CardBox  inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 10.
+
+	aCollectionOfDice add: aLoadedDie.
+	aManager:=FiniteCardsManager withDeckSize: 4.
+	aBoardGame := BoardGame
+		              withShip: 1
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: aManager 
+		              andwithNumberOfLaps: 4.
+	shipsPlaying := aBoardGame getShipsPlaying.
+	aShip := shipsPlaying at: 1.
+
+	aBoardGame playTurnWithOutReward.
+	aBoardGame playTurnWithOutReward.
+	
+	self assert: aShip getLaps equals:3. 
+	
+
+
+]

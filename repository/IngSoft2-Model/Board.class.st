@@ -38,13 +38,16 @@ Board >> checkAfterEffects: aCollectionOfShips [
 { #category : #'as yet unclassified' }
 Board >> checkPositionOf: aShip [
 
-	| actualPosition |
+	| actualPosition lapsPassed |
 	actualPosition := aShip getPosition.
 
 	
 	actualPosition > boxes size ifTrue: [
-		actualPosition := actualPosition - boxes size.
-		aShip updateLaps ].
+		lapsPassed := actualPosition  // boxes size.
+		lapsPassed > 0 ifTrue: [
+		aShip updateLaps].
+		actualPosition  := actualPosition  \\ boxes size.
+		].
 
 	
 	actualPosition < 1 ifTrue: [
