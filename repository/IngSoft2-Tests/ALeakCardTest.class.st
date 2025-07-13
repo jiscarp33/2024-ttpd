@@ -232,3 +232,53 @@ ALeakCardTest >> test_06_When2LeaksCardsArePlayedThenTheTargetShipCuadriplicateC
 	
 
 ]
+
+{ #category : #running }
+ALeakCardTest >> test_07_WhenALeakCardIsRemoveFromActivesFromTheShipThenAppearInTheDiscardDeckAndTheOtherContinuedInTheActives [
+
+	| aShip anotherShip aCard boxesArray aBoard aCollectionOfDice aLoadedDie  aBoardGame aFiniteManager anotherCard cancellationCard |
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 10.
+
+	aCollectionOfDice add: aLoadedDie.
+
+	aFiniteManager:= FiniteCardsManager withDeckSize: 100.
+	aBoardGame := BoardGame
+		              withShip: 2
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+						  withManager: aFiniteManager 
+		              andwithNumberOfLaps: 2.
+	aShip := aBoardGame getShipsPlaying at:1.
+	anotherShip:=  aBoardGame getShipsPlaying at:2.
+	aCard:= LeakCard new.
+	cancellationCard:=CancellationCard new.
+
+
+	
+	aCard:= LeakCard new.
+	anotherCard:=LeakCard new.
+	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	anotherCard affectTo: anotherShip  from:aShip  playing: aBoardGame . 
+	cancellationCard affectTo: aCard  from: anotherShip  playing: aBoardGame .
+
+	anotherShip consumeFuel: 10.
+
+	self assert: anotherShip getFuel equals:2.
+	
+	self assert: (aFiniteManager getDiscardDeck at:1) isLeak.
+	
+	cancellationCard affectTo: anotherCard  from: anotherShip  playing: aBoardGame .
+	self assert: (aFiniteManager getDiscardDeck at:2) isLeak.
+	
+
+
+		
+
+]
