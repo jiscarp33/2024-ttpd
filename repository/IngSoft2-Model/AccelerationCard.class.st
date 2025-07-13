@@ -8,7 +8,7 @@ Class {
 AccelerationCard >> affectTo: aShip from: aShip2 playing: aBoardGame [ 
 	| shipsPlaying |
 	shipsPlaying := aBoardGame getShipsPlaying.
-	shipsPlaying do: [ :ship | ship addActiveCards: AccelerationCard new. ].
+	shipsPlaying do: [ :ship | ship addActiveCards: self ].
 	^AccelerationCard new.
 	
 	

@@ -286,6 +286,7 @@ AShipTest >> test_30_WhenAshipHasActiveOverloadCardThenShipIsAffected [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
@@ -317,6 +318,7 @@ AShipTest >> test_31_WhenAShipHasActiveAccelerationCardThenAllShipsAffected [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
@@ -349,6 +351,7 @@ AShipTest >> test_32_WhenAShipRunOutOfFuelAndHasAnAllyThenAllyShareFuel [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+					     withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
@@ -382,6 +385,7 @@ aCard:= AllyCard new.
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aShip := aBoardGame getShipsPlaying at: 1.
 	anotherShip := aBoardGame getShipsPlaying at: 2.
@@ -450,4 +454,142 @@ AShipTest >> test_37_WhenAShipWantsToRemoveACardFromItsHandThenTheCardIsRemoved 
 	aShip addCard: anotherCard.
 	aShip removeCardFromHand: aCard.
 	self assert: (aShip getCards size) equals: 1.
+]
+
+{ #category : #tests }
+AShipTest >> test_38_WhenAShipHasNitroTheThrowIsUpto3MoreThenNo [
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying firstThrow secondThrow thirdThrow fourThrow |
+	aNitroCard := NitroCard new.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 50.
+	anotherLoadedDie := LoadedDie of: 40.
+	aCollectionOfDice add: aLoadedDie.
+	aCollectionOfDice add: anotherLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 3
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: CardsManager new
+		              andwithNumberOfLaps: 2.
+	shipsPlaying := aBoardGame getShipsPlaying.
+	aShip := shipsPlaying at: 1.
+	anotherShip := shipsPlaying at: 2.
+	aNitroCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	
+	firstThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	secondThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	thirdThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	fourThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	
+	
+	
+	
+	self assert: firstThrow equals: 93.
+	self assert: secondThrow  equals: 93.
+	self assert: thirdThrow  equals: 93.
+	self assert: fourThrow equals: 90.
+		
+]
+
+{ #category : #tests }
+AShipTest >> test_39_WhenAShipHas2NitroCardsAplliaedTheThrowIsUpto3MoreDuring6TurnsThenNo [
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying firstThrow secondThrow thirdThrow fourThrow anotherNitroCard fiveThrow sixThrow sevenThrow |
+	aNitroCard := NitroCard new.
+	anotherNitroCard:=NitroCard new.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 50.
+	anotherLoadedDie := LoadedDie of: 40.
+	aCollectionOfDice add: aLoadedDie.
+	aCollectionOfDice add: anotherLoadedDie.
+	aBoardGame := BoardGame
+		              withShip: 3
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: CardsManager new
+		              andwithNumberOfLaps: 2.
+	shipsPlaying := aBoardGame getShipsPlaying.
+	aShip := shipsPlaying at: 1.
+	anotherShip := shipsPlaying at: 2.
+	aNitroCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	aNitroCard affectTo: anotherShip  from:aShip  playing:aBoardGame. 
+	
+	firstThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	secondThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	thirdThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	fourThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	fiveThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	sixThrow:= anotherShip throwDice: aCollectionOfDice.
+	anotherShip decrementNitroTurns.
+	sevenThrow:= anotherShip throwDice: aCollectionOfDice.
+	
+
+	
+	
+	
+	
+	
+	
+	
+	self assert: firstThrow equals: 93.
+	self assert: secondThrow  equals: 93.
+	self assert: thirdThrow  equals: 93.
+	self assert: fourThrow equals: 93.
+	self assert: fiveThrow equals: 93.
+	self assert: sixThrow equals:93.
+	self assert: sevenThrow equals:90.
+		
+]
+
+{ #category : #tests }
+AShipTest >> test_40_WhenAShipIsInACardBoxAndNoCardsInDeckOrDiscardDeckThenItNotReciveACard [
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie  shipsPlaying     anotherNitroCard    aManager |
+	aNitroCard := NitroCard new.
+	anotherNitroCard:=NitroCard new.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (CardBox  inPlace: 2).
+	boxesArray add: (CardBox  inPlace: 3).
+	boxesArray add: (CardBox  inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 3.
+
+	aCollectionOfDice add: aLoadedDie.
+	aManager:=FiniteCardsManager withDeckSize: 4.
+	aBoardGame := BoardGame
+		              withShip: 3
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: aManager 
+		              andwithNumberOfLaps: 2.
+	shipsPlaying := aBoardGame getShipsPlaying.
+	aShip := shipsPlaying at: 1.
+	anotherShip := shipsPlaying at: 2.
+	aBoardGame playTurnWithOutReward. 
+	self assert: aShip getCards size equals:2. 
+	
 ]

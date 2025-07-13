@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #testing }
+PermanentCard >> isAlly [ 
+	^false
+]
+
+{ #category : #testing }
+PermanentCard >> isLeak [
+	^false
+]
+
+{ #category : #testing }
 PermanentCard >> isPermanent [
 	^true
 ]

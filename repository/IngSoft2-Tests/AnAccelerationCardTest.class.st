@@ -1,7 +1,7 @@
 Class {
 	#name : #AnAccelerationCardTest,
 	#superclass : #TestCase,
-	#category : #'IngSoft2-Tests'
+	#category : 'IngSoft2-Tests'
 }
 
 { #category : #running }
@@ -30,6 +30,7 @@ AnAccelerationCardTest >> test_02_WhenAnAccelerationCardIsAplyThenAllShipsGetThi
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	aCard:= AccelerationCard new.
 	aShip := aBoardGame getShipsPlaying at: 1.
@@ -65,6 +66,7 @@ AnAccelerationCardTest >> test_03_AnAcelerationCardMessageIsBeingRefactor [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.

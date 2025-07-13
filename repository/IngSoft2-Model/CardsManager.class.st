@@ -1,7 +1,7 @@
 Class {
 	#name : #CardsManager,
 	#superclass : #Object,
-	#category : 'IngSoft2-Model'
+	#category : #'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -15,6 +15,8 @@ CardsManager >> cardsdistribution [
 	cardsDistribution add: (Array with: CancellationCard with: 40).
 	cardsDistribution add: (Array with: RedoCard with: 50).
 	cardsDistribution add: (Array with: RepeatCard with: 60).
+	cardsDistribution add:(Array with: NitroCard with:70).
+	cardsDistribution add:(Array with: LeakCard  with:80).
 	^cardsDistribution.
 ]
 
@@ -23,10 +25,20 @@ CardsManager >> createACard [
 	
 	| aDistributionOfCards randomValue selectedCard |
 	aDistributionOfCards := self cardsdistribution.
-	randomValue := Random new next * 60.
+	randomValue := Random new next * 80.
 	selectedCard := aDistributionOfCards detect: [:each |
             randomValue <= (each at: 2).
         ] ifNone: [aDistributionOfCards last].
 	
 	^(selectedCard at: 1) new.
+]
+
+{ #category : #'as yet unclassified' }
+CardsManager >> discard: aCard [
+	^self
+]
+
+{ #category : #'as yet unclassified' }
+CardsManager >> giveCard [
+	^self createACard 
 ]

@@ -1,7 +1,7 @@
 Class {
 	#name : #CancellationCard,
 	#superclass : #InstantCard,
-	#category : #'IngSoft2-Model'
+	#category : 'IngSoft2-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -9,6 +9,7 @@ CancellationCard >> affectTo: aCard from: aShip playing: aBoardGame [
 	| shipsPlaying |
 	shipsPlaying := aBoardGame getShipsPlaying.
 	shipsPlaying do: [ :ship | ship removeActiveCard: aCard ].
+	aBoardGame getCardManager discard:aCard. 
 	^CancellationCard new.
 	
 ]

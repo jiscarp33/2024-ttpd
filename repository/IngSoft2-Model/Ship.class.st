@@ -9,7 +9,9 @@ Class {
 		'state',
 		'lastDieResult',
 		'aCollectionOfCards',
-		'aCollectionOfActiveCards'
+		'aCollectionOfActiveCards',
+		'nitroTurns',
+		'recentlyDeactivatedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -28,8 +30,14 @@ Ship >> > anotherShip [
 ]
 
 { #category : #'as yet unclassified' }
-Ship >> MyFirstAlly [
-	aCollectionOfActiveCards do:[:aCard| aCard powerMove =0 ifTrue:[ ^(aCard getAlly)] ]
+Ship >> MyFirstAlly [ 
+	aCollectionOfActiveCards do: [:aCard | 	aCard isAlly ifTrue: [ ^aCard getAlly ] ].
+
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> activateNitro [
+	nitroTurns:= nitroTurns + 3.
 ]
 
 { #category : #adding }
@@ -49,8 +57,8 @@ Ship >> changeStateToPlay [
 
 { #category : #'as yet unclassified' }
 Ship >> checkAlly [
-	(aCollectionOfActiveCards isEmpty) ifTrue: [^false ].
-	aCollectionOfActiveCards do:[:aCard| ((aCard powerMove) = 0) ifTrue: [^true ]]
+	^ aCollectionOfActiveCards anySatisfy: [:card | card isAlly ].
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -75,13 +83,17 @@ Ship >> checkTurn [
 
 { #category : #'as yet unclassified' }
 Ship >> consumeFuel: amount [
+	| adjustedAmount |
 
-	fuel - amount > 0
-		ifTrue: [ fuel := fuel - amount ]
+	adjustedAmount := amount * self leakMultiplier.
+	
+	fuel - adjustedAmount   > 0
+		ifTrue: [ fuel := fuel - adjustedAmount  ]
 		ifFalse: [
 			self checkAlly
-				ifTrue: [ self consumeFuelFromAlly: fuel - amount ]
-				ifFalse: [ self runOutOfFuel ] ]
+				ifTrue: [ self consumeFuelFromAlly: fuel - adjustedAmount  ]
+				ifFalse: [ self runOutOfFuel.
+					self hasLeak ifTrue: [ self desactivateLeak ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -96,8 +108,27 @@ Ship >> consumeFuelFromAlly: anAmount [
 ]
 
 { #category : #'as yet unclassified' }
+Ship >> countLeakCards [
+^ aCollectionOfActiveCards count: [:card | card isLeak].
+]
+
+{ #category : #'as yet unclassified' }
 Ship >> decreaseLaps [
 	laps := laps - 1.
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> decrementNitroTurns [
+	nitroTurns := (nitroTurns - 1) max: 0.
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> desactivateLeak [
+	|aLeakCard|
+	aLeakCard := LeakCard new.
+	recentlyDeactivatedCards add: aLeakCard.
+	aCollectionOfActiveCards := aCollectionOfActiveCards reject: [:card | card isLeak ].
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -110,6 +141,15 @@ Ship >> endCursed [
 { #category : #'as yet unclassified' }
 Ship >> getActiveCards [
 	^aCollectionOfActiveCards 
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> getAndClearRecentlyDeactivatedCards [
+	| discarded |
+	discarded := recentlyDeactivatedCards.
+	recentlyDeactivatedCards := OrderedCollection new.
+	^ discarded
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -138,6 +178,11 @@ Ship >> getMaxFuel [
 ]
 
 { #category : #'as yet unclassified' }
+Ship >> getNitroTurns [
+	^nitroTurns 
+]
+
+{ #category : #'as yet unclassified' }
 Ship >> getPosition [
 	^position.
 ]
@@ -145,6 +190,11 @@ Ship >> getPosition [
 { #category : #'as yet unclassified' }
 Ship >> getState [
 	^state.
+]
+
+{ #category : #testing }
+Ship >> hasLeak [
+^ aCollectionOfActiveCards anySatisfy: [:card | card isLeak ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -158,16 +208,32 @@ Ship >> intitializeWithMaxFuel: amountMaxFuel [
 	position:= 1.
 	fuel:= amountMaxFuel.
 	maxFuel:= amountMaxFuel.
+	nitroTurns :=0.
+
 	laps:= 1.
 	state := Playing new.
 	lastDieResult := 0.
 	aCollectionOfCards :=OrderedCollection new.
 	aCollectionOfActiveCards:=OrderedCollection new.
+	recentlyDeactivatedCards:=OrderedCollection new.
 ]
 
 { #category : #testing }
 Ship >> isCursed [
 	state := Jail new.
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> leakMultiplier [
+	| leakCount |
+	leakCount := aCollectionOfActiveCards count: [:card | card isLeak ].
+	^ 2 raisedTo: leakCount.
+
+]
+
+{ #category : #'as yet unclassified' }
+Ship >> modifierForDiceRoll [
+	^ nitroTurns > 0 ifTrue: [ 3 ] ifFalse: [ 0 ].
 ]
 
 { #category : #'as yet unclassified' }
@@ -234,7 +300,7 @@ Ship >> throwDice: aCollectionOfDice [
 	aCollectionOfDice do: [ :die |
 	 positionsToMove := positionsToMove + (die throw). ].
 	lastDieResult := positionsToMove.	
-	^positionsToMove.
+	^positionsToMove + self modifierForDiceRoll.
 ]
 
 { #category : #'as yet unclassified' }

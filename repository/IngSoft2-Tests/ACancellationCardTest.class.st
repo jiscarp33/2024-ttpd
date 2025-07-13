@@ -1,7 +1,7 @@
 Class {
 	#name : #ACancellationCardTest,
 	#superclass : #TestCase,
-	#category : #'IngSoft2-Tests'
+	#category : 'IngSoft2-Tests'
 }
 
 { #category : #tests }
@@ -49,6 +49,7 @@ ACancellationCardTest >> test_02_ACancelationCardMessageIsBeingRefactor [
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
+						  withManager: (CardsManager new)
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.

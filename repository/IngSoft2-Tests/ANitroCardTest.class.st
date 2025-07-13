@@ -1,24 +1,16 @@
 Class {
-	#name : #AOverloadCardTest,
+	#name : #ANitroCardTest,
 	#superclass : #TestCase,
-	#category : 'IngSoft2-Tests'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #running }
-AOverloadCardTest >> test_01_ThePoweMoveOfAOverloadCardIsMinus2 [ 
-| aCard |
-aCard:= OverloadCard new.
-self assert:aCard powerMove equals: -2.
+ANitroCardTest >> test_01_WhenANitroCardIsApliedTheShipHas3TurnsWithNitro [
 
-]
-
-{ #category : #running }
-AOverloadCardTest >> test_02_WhenAOverloadCardIsAplyToAShipThentheCardIsAddedToTheCollectionOfActiveCards [
-| aCard aShip anotherShip aCollectionOfShips aCollectionOfDice aDie boxesArray aBoard aLoadedDie anotherLoadedDie aBoardGame |
-aCard:= OverloadCard new.
-
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying |
+	aNitroCard := NitroCard new.
 	boxesArray := OrderedCollection new.
-	boxesArray add: (NoEffectBox  inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 1).
 	boxesArray add: (NoEffectBox inPlace: 2).
 	boxesArray add: (NoEffectBox inPlace: 3).
 	boxesArray add: (NoEffectBox inPlace: 4).
@@ -32,42 +24,50 @@ aCard:= OverloadCard new.
 		              withShip: 3
 		              withBoard: aBoard
 		              WithDice: aCollectionOfDice
-						  withManager: (CardsManager new)
-		              andwithNumberOfLaps: 2.
-	aShip := aBoardGame getShipsPlaying at: 1.
-	anotherShip := aBoardGame getShipsPlaying at: 2.
-	aCard affectTo: anotherShip from: aShip playing: aBoardGame.
-
-	
-self assert:((anotherShip getActiveCards at:1) isKindOf:OverloadCard).
-
-]
-
-{ #category : #running }
-AOverloadCardTest >> test_03_AnOverloadCardMessageIsBeingRefactor [
-
-	| anOverloadCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying |
-	anOverloadCard := OverloadCard new.
-	boxesArray := OrderedCollection new.
-	boxesArray add: (NoEffectBox  inPlace: 1).
-	boxesArray add: (NoEffectBox inPlace: 2).
-	boxesArray add: (NoEffectBox inPlace: 3).
-	boxesArray add: (NoEffectBox inPlace: 4).
-	aBoard := Board withBoxesArray: boxesArray.
-	aCollectionOfDice := OrderedCollection new.
-	aLoadedDie := LoadedDie of: 50.
-	anotherLoadedDie := LoadedDie of: 40.
-	aCollectionOfDice add: aLoadedDie.
-	aCollectionOfDice add: anotherLoadedDie.
-	aBoardGame := BoardGame
-		              withShip: 3
-		              withBoard: aBoard
-		              WithDice: aCollectionOfDice
-						  withManager: (CardsManager new)
+		              withManager: CardsManager new
 		              andwithNumberOfLaps: 2.
 	shipsPlaying := aBoardGame getShipsPlaying.
 	aShip := shipsPlaying at: 1.
-	anotherShip := shipsPlaying at: 2. 
+	anotherShip := shipsPlaying at: 2.
+	aNitroCard affectTo: anotherShip from: aShip playing: aBoardGame.
+
 	
-	self assert: ((anOverloadCard affectTo: aShip from: anotherShip playing: aBoardGame) isKindOf: OverloadCard). 
+	
+	
+	self assert: anotherShip getNitroTurns equals: 3
+]
+
+{ #category : #running }
+ANitroCardTest >> test_02_WhenANitroCardIsApliedTheCardAppearInTheDeckDiscard [
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie anotherLoadedDie shipsPlaying aCardManager aCardInDiscardDeck |
+	aNitroCard := NitroCard new.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (NoEffectBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 50.
+	anotherLoadedDie := LoadedDie of: 40.
+	aCollectionOfDice add: aLoadedDie.
+	aCollectionOfDice add: anotherLoadedDie.
+	aCardManager:=FiniteCardsManager withDeckSize: 100.
+	aBoardGame := BoardGame
+		              withShip: 3
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: aCardManager 
+		              andwithNumberOfLaps: 2.
+	shipsPlaying := aBoardGame getShipsPlaying.
+	aShip := shipsPlaying at: 1.
+	anotherShip := shipsPlaying at: 2.
+	aNitroCard affectTo: anotherShip from: aShip playing: aBoardGame.
+	
+
+	aCardInDiscardDeck:=aCardManager getDiscardDeck at:1.
+	
+	
+	self assert: (aCardInDiscardDeck isNitro).
 ]

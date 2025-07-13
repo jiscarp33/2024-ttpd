@@ -109,3 +109,19 @@ ABoardTest >> test_22_ABoardKnowsTheLastBoxThatWasPlayed [
 		andLaps: 2.
 	self assert: ((aBoard getLastBox) isKindOf: NoEffectBox).
 ]
+
+{ #category : #tests }
+ABoardTest >> test_23_ABoardDeliverTheDeckToCardBox [
+
+	| aBoard boxesArray aManager |
+	aManager:=FiniteCardsManager withDeckSize: 5.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (NoEffectBox inPlace: 2).
+	boxesArray add: (CardBox inPlace: 3).
+	boxesArray add: (NoEffectBox inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aBoard useCardManager: aManager.
+
+	self assert: ((aBoard boxes at: 3)getCardManager   isKindOf: CardsManager   ).
+]
