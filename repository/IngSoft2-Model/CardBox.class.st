@@ -15,8 +15,10 @@ CardBox class >> inPlace: aPosition [
 { #category : #'as yet unclassified' }
 CardBox >> effectShips: aCollectionOfShips playing: aShip [
 	| aCard |
-	aCard := cardManager  giveCard .
-	aShip addCard: aCard.
+	aCard := cardManager giveCard.
+	aCard isNil ifFalse: [
+		aShip addCard: aCard ].
+
 ]
 
 { #category : #'as yet unclassified' }

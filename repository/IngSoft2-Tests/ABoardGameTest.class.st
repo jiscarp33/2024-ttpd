@@ -963,6 +963,7 @@ ABoardGameTest >> test_37_ACardsManagerIsPassWhenABoardGameIsCreated [
 		              WithDice: aCollectionOfDice 
 						  withManager: aCardManager
 		              andwithNumberOfLaps: 2.
+
 	self assert: (aBoardGame getCardManager isKindOf: CardsManager). 
 ]
 

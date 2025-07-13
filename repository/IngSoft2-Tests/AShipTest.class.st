@@ -562,3 +562,34 @@ AShipTest >> test_39_WhenAShipHas2NitroCardsAplliaedTheThrowIsUpto3MoreDuring6Tu
 	self assert: sevenThrow equals:90.
 		
 ]
+
+{ #category : #tests }
+AShipTest >> test_40_WhenAShipIsInACardBoxAndNoCardsInDeckOrDiscardDeckThenItNotReciveACard [
+
+	| aNitroCard aShip anotherShip aBoardGame boxesArray aBoard aCollectionOfDice aLoadedDie  shipsPlaying     anotherNitroCard    aManager |
+	aNitroCard := NitroCard new.
+	anotherNitroCard:=NitroCard new.
+	boxesArray := OrderedCollection new.
+	boxesArray add: (NoEffectBox inPlace: 1).
+	boxesArray add: (CardBox  inPlace: 2).
+	boxesArray add: (CardBox  inPlace: 3).
+	boxesArray add: (CardBox  inPlace: 4).
+	aBoard := Board withBoxesArray: boxesArray.
+	aCollectionOfDice := OrderedCollection new.
+	aLoadedDie := LoadedDie of: 3.
+
+	aCollectionOfDice add: aLoadedDie.
+	aManager:=FiniteCardsManager withDeckSize: 4.
+	aBoardGame := BoardGame
+		              withShip: 3
+		              withBoard: aBoard
+		              WithDice: aCollectionOfDice
+		              withManager: aManager 
+		              andwithNumberOfLaps: 2.
+	shipsPlaying := aBoardGame getShipsPlaying.
+	aShip := shipsPlaying at: 1.
+	anotherShip := shipsPlaying at: 2.
+	aBoardGame playTurnWithOutReward. 
+	self assert: aShip getCards size equals:2. 
+	
+]
